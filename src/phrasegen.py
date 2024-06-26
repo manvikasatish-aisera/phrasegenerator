@@ -1,7 +1,7 @@
 import csv
 import os
 
-def loop_through_docs():
+def iterate_docs():
     directory = "documents"
     for filename in os.scandir(directory):
         doc = filename
