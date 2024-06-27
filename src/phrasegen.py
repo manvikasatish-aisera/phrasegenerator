@@ -39,7 +39,7 @@ def postprocess(list, currenttime):
 
 def csvtoexcel(csvfile):
     df_new = pd.read_csv(csvfile)
-    GFG = pd.ExcelWriter('results.xlsx')
+    GFG = pd.ExcelWriter('results/results.xlsx')
     df_new.to_excel(GFG, index=False, header=True)
     GFG.close()
     
