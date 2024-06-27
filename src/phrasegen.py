@@ -1,7 +1,7 @@
 import csv
 import os
 import datetime
-
+import pandas as pd
 
 def iterate_docs():
     directory = "./documents"
@@ -31,8 +31,16 @@ def call_openai(doc, prompt):
 
 def postprocess(list, currenttime):
     # add timestamp
-    with open('results/results.csv', 'a', newline='') as file:
+    file_path = 'results/results.csv'
+    with open(file_path, 'a', newline='') as file:
         writetocsv = csv.writer(file)
         writetocsv.writerow(list)
+    csvtoexcel(file_path)
 
+def csvtoexcel(csvfile):
+    df_new = pd.read_csv(csvfile)
+    GFG = pd.ExcelWriter('results.xlsx')
+    df_new.to_excel(GFG, index=False, header=True)
+    GFG.close()
+    
 iterate_docs()
