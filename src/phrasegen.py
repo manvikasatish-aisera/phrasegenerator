@@ -1,14 +1,16 @@
 import csv
 import os
-import openai
 
 
 def iterate_docs():
     directory = "documents"
     for filename in os.scandir(directory):
         doc = filename
-        prompt = "hello"
-        testlist = call_openai(doc, prompt)
+
+        prompt1 = open("prompt1.txt", "r")
+        content = prompt1.read()
+
+        testlist = call_openai(doc, content)
         postprocess(testlist)
 
 def get_openai_creds():
