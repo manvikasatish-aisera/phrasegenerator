@@ -1,6 +1,6 @@
 from openai import OpenAI
 from bs4 import BeautifulSoup
-import PyMupdf
+from PyPDF2 import PdfReader
 
 client = OpenAI()
 
@@ -9,13 +9,13 @@ def extractText_html(html_filepath):
     soup = BeautifulSoup(file, 'html.parser')
     document_text = soup.get_text()
   return document_text    
+
 def extract_text_from_pdf(pdf_filepath):
     document_text = ''
-    with PyMuPDF.open(pdf_filepath) as doc:
-        for page in doc:
-            document_text += page.get_text()
+    reader = PdfReader(pdf_filepath)
+    for i in reader.pages:
+      text_document = text_document + i.extract_text()
     return document_text
-
 
 def send_prompt_with_document(prompt, document_text):
   combined_prompt = prompt + "\n\nDocument:\n" + document_text + "\n###\n"
