@@ -2,6 +2,7 @@ import csv
 import os
 import openai
 
+
 def iterate_docs():
     directory = "documents"
     for filename in os.scandir(directory):
