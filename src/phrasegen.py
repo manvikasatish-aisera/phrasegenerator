@@ -1,9 +1,17 @@
 import csv
 import os
+import datetime
 
 
 def iterate_docs():
     directory = "./documents"
+    currenttime = datetime.datetime.now()
+
+    program_run = ["program run time", currenttime]
+    with open('results/results.csv', 'a', newline='') as file:
+        writetocsv = csv.writer(file)
+        writetocsv.writerow(program_run)
+
     for filename in os.scandir(directory):
         doc = filename
 
@@ -11,17 +19,17 @@ def iterate_docs():
         content = prompt1.read()
 
         testlist = call_openai(doc, content)
-        postprocess(testlist)
+        postprocess(testlist, currenttime)
 
 def get_openai_creds():
     return "foo"
 
 def call_openai(doc, prompt):
     get_openai_creds()
-    testlist = ["docid", "this is an utterance", "paragraph 2"]
+    testlist = ["doc id", "this is an utterance", "paragraph 2"]
     return testlist
 
-def postprocess(list):
+def postprocess(list, currenttime):
     # add timestamp
     with open('results/results.csv', 'a', newline='') as file:
         writetocsv = csv.writer(file)
