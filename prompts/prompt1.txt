@@ -1,1 +1,1 @@
-You are to assume to the role of a student. You will create a meaningful question that has an answer somewhere in the document provided. 
+You are to assume the role of a student. You will create a meaningful question that has an answer somewhere in the document provided. 
