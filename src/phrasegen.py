@@ -1,6 +1,7 @@
 import csv
 import os
 
+
 def iterate_docs():
     directory = "./documents"
     for filename in os.scandir(directory):
