@@ -1,20 +1,18 @@
-from openai import OpenAI
+from openai import AzureOpenAI
 from bs4 import BeautifulSoup
 from PyPDF2 import PdfReader
-
-client = OpenAI()
 
 def extractText_html(html_filepath):
   with open(html_filepath, 'r', encoding = 'utf-8') as file:
     soup = BeautifulSoup(file, 'html.parser')
     document_text = soup.get_text()
-  return document_text    
+  return document_text
 
-def extract_text_from_pdf(pdf_filepath):
+def extractText__pdf(pdf_filepath):
     document_text = ''
     reader = PdfReader(pdf_filepath)
     for i in reader.pages:
-      text_document = text_document + i.extract_text()
+      document_text += i.extract_text()
     return document_text
 
 def send_prompt_with_document(prompt, document_text):
@@ -31,3 +29,6 @@ def send_prompt_with_document(prompt, document_text):
   )
 
   print(completion.choices[0].message)
+
+prompt = open("prompts/prompt1.txt", "r").read()
+print(send_prompt_with_document(prompt, "documents/Declaration-of-Independence.pdf"))
