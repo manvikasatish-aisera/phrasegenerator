@@ -38,4 +38,4 @@ def send_prompt_with_document(filepath, promptNum):
 
   return(completion.choices[0].message)
     
-print(send_prompt_with_document("/Users/aaravrathi/Desktop/Autopilot.html",2))
+print(send_prompt_with_document("./documents/Tesla_Autopilot.htm",2))
