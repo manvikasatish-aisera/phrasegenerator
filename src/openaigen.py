@@ -2,7 +2,7 @@ from openai import AzureOpenAI
 from bs4 import BeautifulSoup
 from PyPDF2 import PdfReader
 import tiktoken
-
+from numpy import random
 def extractText_html(html_filepath):
   with open(html_filepath, 'r', encoding = 'utf-8') as file:
     soup = BeautifulSoup(file, 'html.parser')
@@ -40,17 +40,18 @@ def send_prompt_with_document(filepath, promptNum):
   title = filepath[filepath.rfind('/')+1 : filepath.rfind('.')]
   
   prompt = open("prompts/prompt" + str(promptNum) + ".txt", "r").read()
-
+  
+  #OpenAi creds go here
   completion = client.chat.completions.create(
-    model="gpt4",
-    temperature = 0.6,
+    model = "gpt4",
+    temperature = round(random.uniform(0,2),1),
     messages=[
       {"role": "system", "content": '[Document Title] \n"' + title + '"\n\n[Document Content]\n<<' + document_text + ">>\n###\n"},
       {"role": "user", "content": '[Prompt]\n"' + prompt + '"'}
     ]
   )
 
-  return(completion.choices)
+  return(completion.choices[0].message.content)
     
-for i in range(3):  
-  print(send_prompt_with_document("documents/FAQ _ GeForce.html",2)[i].message.content)
+
+print(send_prompt_with_document("documents/Manage & delete your Search history - Computer - Google Search Help.html",2))
