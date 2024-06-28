@@ -6,13 +6,13 @@ def extractText_html(html_filepath):
   with open(html_filepath, 'r', encoding = 'utf-8') as file:
     soup = BeautifulSoup(file, 'html.parser')
     document_text = soup.get_text()
-  return document_text
+  return document_text    
 
 def extractText__pdf(pdf_filepath):
     document_text = ''
     reader = PdfReader(pdf_filepath)
     for i in reader.pages:
-      document_text += i.extract_text()
+      text_document = text_document + i.extract_text()
     return document_text
 
 def send_prompt_with_document(filepath, promptNum):
@@ -37,4 +37,4 @@ def send_prompt_with_document(filepath, promptNum):
 
   return(completion.choices[0].message)
     
-print(send_prompt_with_document("/Users/aaravrathi/Desktop/Autopilot.html",2))
+print(send_prompt_with_document("./documents/Tesla_Autopilot.htm",2))

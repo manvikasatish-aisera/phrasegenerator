@@ -1,0 +1,1 @@
+Given the title of document, assume the role of the specific target audience intended for such a title. Under this role, create a question that has a solution somewhere in the provided document and is a sentence long. Do not include your audience role within your output.
