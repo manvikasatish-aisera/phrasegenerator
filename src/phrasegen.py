@@ -26,7 +26,7 @@ def iterate_docs():
         # result_list.append(send_prompt_with_document(prompt, filepath))
         # testlist = call_openai(doc, prompt)
         # postprocess(testlist, currenttime)
-    print(result_list)
+    print(result_list) 
 
 def postprocess(list, currenttime):
     # add timestamp
