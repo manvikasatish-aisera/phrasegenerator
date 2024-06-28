@@ -15,20 +15,26 @@ def extractText__pdf(pdf_filepath):
       document_text += i.extract_text()
     return document_text
 
-def send_prompt_with_document(prompt, document_text):
-  combined_prompt = prompt + "\n\nDocument:\n" + document_text + "\n###\n"
+def send_prompt_with_document(filepath, promptNum):
+  if filepath.endswith('.pdf'):
+    document_text = extractText__pdf(filepath) 
+  if filepath.endswith('.html'):
+    document_text = extractText_html(filepath)
   
-  client = OpenAI()
+  title = filepath[filepath.rfind('/')+1 : filepath.rfind('.')]
+  
+  prompt = open("prompts/prompt" + str(promptNum) + ".txt", "r").read()
+  
+  #add AzureOpenAi credentials
   completion = client.chat.completions.create(
-    model="gpt-3.5-turbo",
+    model="gpt4",
     temperature = 0.6,
     messages=[
-      {"role": "system", "content": "\n\nDocument:\n" + document_text + "\n###\n"},
-      {"role": "user", "content": prompt}
+      {"role": "system", "content": '[Document Title] \n"' + title + '"\n\n[Document Content]\n<<' + document_text + ">>\n###\n"},
+      {"role": "user", "content": '[Prompt]\n"' + prompt + '"'}
     ]
   )
 
-  print(completion.choices[0].message)
-
-prompt = open("prompts/prompt1.txt", "r").read()
-print(send_prompt_with_document(prompt, "documents/Declaration-of-Independence.pdf"))
+  return(completion.choices[0].message)
+    
+print(send_prompt_with_document("/Users/aaravrathi/Desktop/Autopilot.html",2))

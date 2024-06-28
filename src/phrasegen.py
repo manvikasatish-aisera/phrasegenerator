@@ -1,6 +1,7 @@
 import csv
 import os
 import datetime
+import fitz
 from openaigen import *
 
 def iterate_docs():
@@ -33,5 +34,5 @@ def postprocess(list, currenttime):
     with open(file_path, 'a', newline='') as file:
         writetocsv = csv.writer(file)
         writetocsv.writerow(list)
-    
+
 iterate_docs()
