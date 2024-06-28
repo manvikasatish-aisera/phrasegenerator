@@ -24,13 +24,15 @@ def count_tokens(text):
 def check_content_length(filetext):
     expected_count = 8192
     content = []
-    half_length = len(filetext) // 2
 
     token_count = count_tokens(filetext)
     if token_count > expected_count:
-       content = [filetext[:half_length], filetext[half_length:]]
+        while len(filetext) > 0:
+            chunk = filetext[:expected_count]
+            content.append(chunk)
+            filetext = filetext[expected_count:]
     else:
-       content = [filetext]
+        content = [filetext]
   
     return content
        
@@ -43,19 +45,19 @@ def send_prompt_with_document(filepath, promptNum):
   title = filepath[filepath.rfind('/')+1 : filepath.rfind('.')]
   
   prompt = open("prompts/prompt" + str(promptNum) + ".txt", "r").read()
+
+  parts = check_content_length(document_text)
   
-  #OpenAi creds go here
-  
-  completion = client.chat.completions.create(
-    model = "gpt4",
-    temperature = round(random.uniform(0,2),1),
-    messages=[
-      {"role": "system", "content": '[Document Title] \n"' + title + '"\n\n[Document Content]\n<<' + document_text + ">>\n###\n"},
-      {"role": "user", "content": '[Prompt]\n"' + prompt + '"'}
-    ]
-  )
+  #OpenAI creds go here
+
+  for part in parts:
+    completion = client.chat.completions.create(
+      model = "gpt4",
+      temperature = round(random.uniform(0,2),1),
+      messages=[
+        {"role": "system", "content": '[Document Title] \n"' + title + '"\n\n[Document Content]\n<<' + part + ">>\n###\n"},
+        {"role": "user", "content": '[Prompt]\n"' + prompt + '"'}
+      ]
+    )
 
   return(completion.choices[0].message.content)
-    
-
-print(send_prompt_with_document("documents/Manage & delete your Search history - Computer - Google Search Help.html",2))

@@ -17,13 +17,10 @@ def iterate_docs(promptNum):
     for filename in os.scandir(directory):
         doc = filename
         filepath = directory + "/" + doc.name
-  
-        prompt = open("prompts/prompt" + str(promptNum) + ".txt", "r").read()
-        print(filepath, prompt)
-
+        print(filepath)
         for i in range(3):
-            result_list.append(send_prompt_with_document(filepath, promptNum).content)
-            
+            print(send_prompt_with_document(filepath, promptNum))
+
         # postprocess(testlist, currenttime)
     print(result_list) 
 
