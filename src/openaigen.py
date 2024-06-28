@@ -12,7 +12,7 @@ def extractText__pdf(pdf_filepath):
     document_text = ''
     reader = PdfReader(pdf_filepath)
     for i in reader.pages:
-      text_document = text_document + i.extract_text()
+      document_text += i.extract_text()
     return document_text
 
 def send_prompt_with_document(filepath, promptNum):
