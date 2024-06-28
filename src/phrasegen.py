@@ -3,7 +3,7 @@ import os
 import datetime
 from openaigen import *
 
-def iterate_docs():
+def iterate_docs(promptNum):
     directory = "./documents"
     currenttime = datetime.datetime.now()
 
@@ -17,13 +17,13 @@ def iterate_docs():
     for filename in os.scandir(directory):
         doc = filename
         filepath = directory + "/" + doc.name
-
-        prompt = open("prompts/prompt1.txt", "r").read()
+  
+        prompt = open("prompts/prompt" + str(promptNum) + ".txt", "r").read()
         print(filepath, prompt)
-        # print(send_prompt_with_document(prompt, filepath))
 
-        # result_list.append(send_prompt_with_document(prompt, filepath))
-        # testlist = call_openai(doc, prompt)
+        for i in range(3):
+            result_list.append(send_prompt_with_document(filepath, promptNum).content)
+            
         # postprocess(testlist, currenttime)
     print(result_list) 
 
@@ -34,4 +34,4 @@ def postprocess(list, currenttime):
         writetocsv = csv.writer(file)
         writetocsv.writerow(list)
 
-iterate_docs()
+iterate_docs(2)

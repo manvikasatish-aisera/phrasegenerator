@@ -24,11 +24,14 @@ def count_tokens(text):
 def check_content_length(filetext):
     expected_count = 8192
     content = []
+    half_length = len(filetext) // 2
+
     token_count = count_tokens(filetext)
     if token_count > expected_count:
-       p1, p2 = filetext.split(' ', 1)
-       content = [p1, p2]
-    content = [filetext]
+       content = [filetext[:half_length], filetext[half_length:]]
+    else:
+       content = [filetext]
+  
     return content
        
 def send_prompt_with_document(filepath, promptNum):
@@ -41,17 +44,18 @@ def send_prompt_with_document(filepath, promptNum):
   
   prompt = open("prompts/prompt" + str(promptNum) + ".txt", "r").read()
 
+
   #before committing REMOVE CLIENT INFO
+
   completion = client.chat.completions.create(
     model="gpt4",
     temperature = 0.6,
     messages=[
-      {"role": "system", "content": "\n\nDocument:\n" + document_text + "\n###\n"},
-      {"role": "user", "content": prompt}
+      {"role": "system", "content": '[Document Title] \n"' + title + '"\n\n[Document Content]\n<<' + document_text + ">>\n###\n"},
+      {"role": "user", "content": '[Prompt]\n"' + prompt + '"'}
     ]
   )
 
   return(completion.choices[0].message)
 
-for i in range(3):
-  print(send_prompt_with_document("documents/FAQ _ GeForce.html", 2).content)
+send_prompt_with_document('documents/Frequently Asked Questions_ Windows 10 - Microsoft Community.html', 2)
