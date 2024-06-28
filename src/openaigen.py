@@ -50,6 +50,7 @@ def send_prompt_with_document(filepath, promptNum):
     ]
   )
 
-  return(completion.choices[0].message)
+  return(completion.choices)
     
-print(send_prompt_with_document("./documents/anaconda-project-readthedocs-io-en-latest.pdf", 2))
+for i in range(3):  
+  print(send_prompt_with_document("documents/FAQ _ GeForce.html",2)[i].message.content)
