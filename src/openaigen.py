@@ -41,16 +41,17 @@ def send_prompt_with_document(filepath, promptNum):
   
   prompt = open("prompts/prompt" + str(promptNum) + ".txt", "r").read()
 
+  #before committing REMOVE CLIENT INFO
   completion = client.chat.completions.create(
     model="gpt4",
     temperature = 0.6,
     messages=[
-      {"role": "system", "content": '[Document Title] \n"' + title + '"\n\n[Document Content]\n<<' + document_text + ">>\n###\n"},
-      {"role": "user", "content": '[Prompt]\n"' + prompt + '"'}
+      {"role": "system", "content": "\n\nDocument:\n" + document_text + "\n###\n"},
+      {"role": "user", "content": prompt}
     ]
   )
 
-  return(completion.choices)
-    
-for i in range(3):  
-  print(send_prompt_with_document("documents/FAQ _ GeForce.html",2)[i].message.content)
+  return(completion.choices[0].message)
+
+for i in range(3):
+  print(send_prompt_with_document("documents/FAQ _ GeForce.html", 2).content)
