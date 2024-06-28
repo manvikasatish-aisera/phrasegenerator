@@ -1,7 +1,6 @@
 import csv
 import os
 import datetime
-import fitz
 from openaigen import *
 
 def iterate_docs():
