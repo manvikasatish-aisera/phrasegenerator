@@ -48,14 +48,15 @@ def send_prompt_with_document(filepath, promptNum):
   #before committing REMOVE CLIENT INFO
 
   completion = client.chat.completions.create(
-    model="gpt4",
-    temperature = 0.6,
+    model = "gpt4",
+    temperature = round(random.uniform(0,2),1),
     messages=[
       {"role": "system", "content": '[Document Title] \n"' + title + '"\n\n[Document Content]\n<<' + document_text + ">>\n###\n"},
       {"role": "user", "content": '[Prompt]\n"' + prompt + '"'}
     ]
   )
 
-  return(completion.choices[0].message)
+  return(completion.choices[0].message.content)
+    
 
-send_prompt_with_document('documents/Frequently Asked Questions_ Windows 10 - Microsoft Community.html', 2)
+print(send_prompt_with_document("documents/Manage & delete your Search history - Computer - Google Search Help.html",2))
