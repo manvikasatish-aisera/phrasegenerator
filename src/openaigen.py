@@ -2,7 +2,7 @@ from openai import AzureOpenAI
 from bs4 import BeautifulSoup
 from PyPDF2 import PdfReader
 import tiktoken
-
+from numpy import random
 def extractText_html(html_filepath):
   with open(html_filepath, 'r', encoding = 'utf-8') as file:
     soup = BeautifulSoup(file, 'html.parser')
@@ -43,10 +43,9 @@ def send_prompt_with_document(filepath, promptNum):
   title = filepath[filepath.rfind('/')+1 : filepath.rfind('.')]
   
   prompt = open("prompts/prompt" + str(promptNum) + ".txt", "r").read()
-
-
-  #before committing REMOVE CLIENT INFO
-
+  
+  #OpenAi creds go here
+  
   completion = client.chat.completions.create(
     model = "gpt4",
     temperature = round(random.uniform(0,2),1),
