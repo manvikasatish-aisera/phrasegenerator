@@ -40,18 +40,18 @@ def send_prompt_with_document(filepath, promptNum):
   title = filepath[filepath.rfind('/')+1 : filepath.rfind('.')]
   
   prompt = open("prompts/prompt" + str(promptNum) + ".txt", "r").read()
-  
-  #OpenAi creds go here
+
+  #before committing REMOVE CLIENT INFO
   completion = client.chat.completions.create(
     model = "gpt4",
     temperature = round(random.uniform(0,2),1),
     messages=[
-      {"role": "system", "content": '[Document Title] \n"' + title + '"\n\n[Document Content]\n<<' + document_text + ">>\n###\n"},
-      {"role": "user", "content": '[Prompt]\n"' + prompt + '"'}
+      {"role": "system", "content": "\n\nDocument:\n" + document_text + "\n###\n"},
+      {"role": "user", "content": prompt}
     ]
   )
 
-  return(completion.choices[0].message.content)
-    
+  return(completion.choices[0].message)
 
-print(send_prompt_with_document("documents/Manage & delete your Search history - Computer - Google Search Help.html",2))
+for i in range(3):
+  print(send_prompt_with_document("documents/FAQ _ GeForce.html", 2).content)
