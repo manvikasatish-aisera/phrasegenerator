@@ -19,7 +19,6 @@ def extractText__pdf(pdf_filepath):
       document_text += i.extract_text()
     return document_text
 
-# fix these
 def count_tokens(text):
     encoding = tiktoken.get_encoding("cl100k_base")
     num_tokens = len(encoding.encode(text))
