@@ -61,15 +61,12 @@ def send_prompt_with_document(filepath, promptNum):
   prompt = open("prompts/prompt" + str(promptNum) + ".txt", "r").read()
   split = check_content_length(document_text, prompt, title)
 
-  for s in split:
-    print(count_tokens(s))
-
   client = AzureOpenAI(
         api_version = api_version,
         api_key = api_key,
         azure_endpoint = azure_endpoint)
 
-  results = []
+  phrases = []
   for chunk in split:
     completion = client.chat.completions.create(
         model = "gpt4",
@@ -79,9 +76,9 @@ def send_prompt_with_document(filepath, promptNum):
           {"role": "user", "content": '[Prompt]\n"' + prompt + '"'}
         ]
     )
-    place = completion.choices[0].message.content
-    results.append(place)
+    msg = completion.choices[0].message.content
+    phrases.append(msg)
   
-  return results 
+  return phrases 
 
 print(send_prompt_with_document("documents/Frequently Asked Questions_ Windows 10 - Microsoft Community.html", 2))

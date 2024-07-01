@@ -17,11 +17,9 @@ def iterate_docs(promptNum):
     for filename in os.scandir(directory):
         doc = filename
         filepath = directory + "/" + doc.name
-        print(filepath)
-        for i in range(3):
-            print(send_prompt_with_document(filepath, promptNum))
+        print(send_prompt_with_document(filepath, promptNum))
 
-        # postprocess(testlist, currenttime)
+    # postprocess(testlist, currenttime)
     print(result_list) 
 
 def postprocess(list, currenttime):
