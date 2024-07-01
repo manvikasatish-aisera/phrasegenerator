@@ -8,7 +8,6 @@ def iterate_docs(promptNum):
     currenttime = datetime.datetime.now()
 
     program_run = ["program run time", currenttime]
-    result_list = []
     
     with open('results/results.csv', 'a', newline='') as file:
         writetocsv = csv.writer(file)
@@ -17,13 +16,10 @@ def iterate_docs(promptNum):
     for filename in os.scandir(directory):
         doc = filename
         filepath = directory + "/" + doc.name
-        print(send_prompt_with_document(filepath, promptNum))
+        utterances = send_prompt_with_document(filepath, promptNum)
+        postprocess(utterances)
 
-    # postprocess(testlist, currenttime)
-    print(result_list) 
-
-def postprocess(list, currenttime):
-    # add timestamp
+def postprocess(list):
     file_path = 'results/results.csv'
     with open(file_path, 'a', newline='') as file:
         writetocsv = csv.writer(file)
