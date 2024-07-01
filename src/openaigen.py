@@ -80,5 +80,3 @@ def send_prompt_with_document(filepath, promptNum):
     phrases.append(msg)
   
   return phrases 
-
-print(send_prompt_with_document("documents/Frequently Asked Questions_ Windows 10 - Microsoft Community.html", 2))
