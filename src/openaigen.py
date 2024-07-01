@@ -24,13 +24,13 @@ def count_tokens(text):
     num_tokens = len(encoding.encode(text))
     return num_tokens
 
-def check_content_length(filetext):
-    expected_count = 8192
+def check_content_length(filetext, prompt, title):
+    encoding = tiktoken.get_encoding("cl100k_base")
+    expected_count = 8192 - count_tokens(prompt) - count_tokens(title) - count_tokens('[Document Title] \n"' + title + '"\n\n[Document Content]\n<<' + ">>\n###\n" + '[Prompt]\n"' + prompt + '"')
     content = []
 
     token_count = count_tokens(filetext)
     if token_count > expected_count:
-        encoding = tiktoken.get_encoding("cl100k_base")
         encoded_text = encoding.encode(filetext)
         
         start_idx = 0
@@ -59,21 +59,29 @@ def send_prompt_with_document(filepath, promptNum):
   
   title = filepath[filepath.rfind('/')+1 : filepath.rfind('.')]
   prompt = open("prompts/prompt" + str(promptNum) + ".txt", "r").read()
-  
+  split = check_content_length(document_text, prompt, title)
+
+  for s in split:
+    print(count_tokens(s))
+
   client = AzureOpenAI(
         api_version = api_version,
         api_key = api_key,
         azure_endpoint = azure_endpoint)
 
-  completion = client.chat.completions.create(
-      model = "gpt4",
-      temperature = round(random.uniform(0,2),1),
-      messages=[
-        {"role": "system", "content": '[Document Title] \n"' + title + '"\n\n[Document Content]\n<<' + document_text + ">>\n###\n"},
-        {"role": "user", "content": '[Prompt]\n"' + prompt + '"'}
-      ]
-  )
-
-  return(completion.choices[0].message.content)
+  results = []
+  for chunk in split:
+    completion = client.chat.completions.create(
+        model = "gpt4",
+        temperature = round(random.uniform(0,2),1),
+        messages=[
+          {"role": "system", "content": '[Document Title] \n"' + title + '"\n\n[Document Content]\n<<' + chunk + ">>\n###\n"},
+          {"role": "user", "content": '[Prompt]\n"' + prompt + '"'}
+        ]
+    )
+    place = completion.choices[0].message.content
+    results.append(place)
+  
+  return results 
 
 print(send_prompt_with_document("documents/Frequently Asked Questions_ Windows 10 - Microsoft Community.html", 2))
