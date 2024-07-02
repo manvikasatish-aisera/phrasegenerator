@@ -1,28 +1,37 @@
 import csv
 import os
-import datetime
+from datetime import datetime
 from openaigen import *
+import openpyxl
+
+
 
 def iterate_docs(promptNum):
     directory = "./documents"
-    currenttime = datetime.datetime.now()
-
-    program_run = ["program run time", currenttime]
     
-    with open('results/results.csv', 'a', newline='') as file:
-        writetocsv = csv.writer(file)
-        writetocsv.writerow(program_run)
+    currenttime = datetime.now().strftime('%Y-%m-%d_%H:%M:%S')
+    csv_file = os.path.join("results",f"csvResults-{currenttime}.csv")
+    
+    workbook = openpyxl.Workbook()
+    sheet = workbook.active
 
-    for filename in os.scandir(directory):
+    for count, filename in enumerate(os.scandir(directory)):
         doc = filename
         filepath = directory + "/" + doc.name
         utterances = send_prompt_with_document(filepath, promptNum)
-        postprocess(utterances)
-
-def postprocess(list):
-    file_path = 'results/results.csv'
-    with open(file_path, 'a', newline='') as file:
+        postprocess(utterances,csv_file)
+        
+        sheet.cell(sheet.max_row+1,1,utterances[1])
+        for i in range(len(utterances[0])):
+            sheet.cell(sheet.max_row,i+2,utterances[0][i])
+            
+    workbook.save(f"results/excelResults-{currenttime}.xlsx")
+def postprocess(list,csvfile):
+    with open(csvfile, 'a', newline='') as file:
         writetocsv = csv.writer(file)
         writetocsv.writerow(list)
+        
+    
+    
 
 iterate_docs(2)

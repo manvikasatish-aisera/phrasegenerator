@@ -79,4 +79,4 @@ def send_prompt_with_document(filepath, promptNum):
     msg = completion.choices[0].message.content
     phrases.append(msg)
   
-  return phrases 
+  return (phrases,title)
