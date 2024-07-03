@@ -15,13 +15,17 @@ def iterate_docs(promptNum):
     workbook = openpyxl.Workbook()
     sheet = workbook.active
 
-    for count, filename in enumerate(os.scandir(directory)):
+    for filename in os.scandir(directory):
         doc = filename
         filepath = directory + "/" + doc.name
         utterances = send_prompt_with_document(filepath, promptNum)
         postprocess(utterances,csv_file)
         
-        sheet.cell(sheet.max_row+1,1,utterances[1])
+        if sheet['A1'].value == None:
+            sheet.cell(sheet.max_row,1,utterances[1])
+        else:
+            sheet.cell(sheet.max_row+1,1,utterances[1])
+            
         for i in range(len(utterances[0])):
             sheet.cell(sheet.max_row,i+2,utterances[0][i])
             
