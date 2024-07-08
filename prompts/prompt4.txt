@@ -1,0 +1,1 @@
+Given the contents of a document and its title, generate a single question, phrases, or statement that is coherent english. The question, statement, or phrase should be a short sentence. The question, statement, or phrase should either cover main ideas, specific details, or implications.

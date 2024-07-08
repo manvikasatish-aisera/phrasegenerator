@@ -4,8 +4,6 @@ from datetime import datetime
 from openaigen import *
 import openpyxl
 
-
-
 def iterate_docs(promptNum):
     directory = "./documents"
     
@@ -26,12 +24,11 @@ def iterate_docs(promptNum):
             sheet.cell(sheet.max_row,i+2,utterances[0][i])
             
     workbook.save(f"results/excelResults-{currenttime}.xlsx")
+
 def postprocess(list,csvfile):
     with open(csvfile, 'a', newline='') as file:
         writetocsv = csv.writer(file)
         writetocsv.writerow(list)
         
-    
-    
 
-iterate_docs(2)
+iterate_docs(4)
