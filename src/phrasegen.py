@@ -34,4 +34,4 @@ def postprocess(list,csvfile):
         writetocsv = csv.writer(file)
         writetocsv.writerow(list)
 
-iterate_docs(3)
+iterate_docs(4)

@@ -70,7 +70,7 @@ def send_prompt_with_document(filepath, promptNum):
   for chunk in split:
     completion = client.chat.completions.create(
         model = "gpt4",
-        temperature = round(random.uniform(0,2),1),
+        temperature = round(random.uniform(0,1),1),
         messages=[
           {"role": "system", "content": '[Document Title] \n"' + title + '"\n\n[Document Content]\n<<' + chunk + ">>\n###\n"},
           {"role": "user", "content": '[Prompt]\n"' + prompt + '"'}
