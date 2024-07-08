@@ -1,0 +1,1 @@
+Given the title of the document, adopt the perspective of the specific target audience intended for such a title. Create a single sentence question that can be answered by the content within the provided document. Ensure that the question is relevant to the document and do not mention the audience role in your question.
