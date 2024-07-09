@@ -59,18 +59,19 @@ def send_prompt_with_document(filepath, promptNum):
   
   title = filepath[filepath.rfind('/')+1 : filepath.rfind('.')]
   prompt = open("prompts/prompt" + str(promptNum) + ".txt", "r").read()
-  split = check_content_length(document_text, prompt, title)
 
   client = AzureOpenAI(
         api_version = api_version,
         api_key = api_key,
         azure_endpoint = azure_endpoint)
+  
+  split = check_content_length(document_text, prompt, title)
 
   phrases = []
   for chunk in split:
     completion = client.chat.completions.create(
         model = "gpt4",
-        temperature = round(random.uniform(0,1),1),
+        temperature = round(random.uniform(0,1), 1),
         messages=[
           {"role": "system", "content": '[Document Title] \n"' + title + '"\n\n[Document Content]\n<<' + chunk + ">>\n###\n"},
           {"role": "user", "content": '[Prompt]\n"' + prompt + '"'}
