@@ -6,8 +6,8 @@ import openpyxl
 
 def iterate_docs(promptNum):
     # modify later based on what input is taken in elastic search or other database
-    inp = input('Document Name or ID: ')
-    numPhrases = input('Number of Phrases: ')
+    # inp = input('Document Name or ID: ')
+    # numPhrases = input('Number of Phrases: ')
 
     directory = "./documents"
     
