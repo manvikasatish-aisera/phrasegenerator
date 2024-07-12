@@ -6,18 +6,18 @@ from numpy import random
 import os
 from dotenv import load_dotenv
 
-def extractText_html(html_filepath):
-  with open(html_filepath, 'r', encoding = 'utf-8') as file:
-    soup = BeautifulSoup(file, 'html.parser')
-    document_text = soup.get_text()
-  return document_text    
+# def extractText_html(html_filepath):
+#   with open(html_filepath, 'r', encoding = 'utf-8') as file:
+#     soup = BeautifulSoup(file, 'html.parser')
+#     document_text = soup.get_text()
+#   return document_text    
 
-def extractText__pdf(pdf_filepath):
-    document_text = ''
-    reader = PdfReader(pdf_filepath)
-    for i in reader.pages:
-      document_text += i.extract_text()
-    return document_text
+# def extractText__pdf(pdf_filepath):
+#     document_text = ''
+#     reader = PdfReader(pdf_filepath)
+#     for i in reader.pages:
+#       document_text += i.extract_text()
+#     return document_text
 
 def count_tokens(text):
     encoding = tiktoken.get_encoding("cl100k_base")
@@ -46,18 +46,22 @@ def check_content_length(filetext, prompt, title):
         content = [filetext]
     return content
        
-def send_prompt_with_document(filepath, promptNum):
+def send_prompt_with_document(section, promptNum, title):
   load_dotenv()
   api_version = os.getenv('OPENAI_API_VERSION')
   api_key = os.getenv('OPENAI_API_KEY')
   azure_endpoint = os.getenv('OPENAI_AZURE_ENDPOINT')
 
-  if filepath.endswith('.pdf'):
-    document_text = extractText__pdf(filepath) 
-  if filepath.endswith('.html'):
-    document_text = extractText_html(filepath)
+  # don't think we need lines 60-63 anymore because the documents are all pretty
+  # much HTML, at least the rendered content, have to double check
+  # with the other api, but all the ones that are under this api
+  # have html text. 
+
+  # if filepath.endswith('.pdf'):
+  #   document_text = extractText__pdf(filepath) 
+  # if filepath.endswith('.html'):
+  #   document_text = extractText_html(filepath)
   
-  title = filepath[filepath.rfind('/')+1 : filepath.rfind('.')]
   prompt = open("prompts/prompt" + str(promptNum) + ".txt", "r").read()
 
   client = AzureOpenAI(
@@ -65,19 +69,19 @@ def send_prompt_with_document(filepath, promptNum):
         api_key = api_key,
         azure_endpoint = azure_endpoint)
   
-  split = check_content_length(document_text, prompt, title)
+  # split = check_content_length(document_text, prompt, title)
 
-  phrases = []
-  for chunk in split:
-    completion = client.chat.completions.create(
-        model = "gpt4",
-        temperature = round(random.uniform(0,1), 1),
-        messages=[
-          {"role": "system", "content": '[Document Title] \n"' + title + '"\n\n[Document Content]\n<<' + chunk + ">>\n###\n"},
-          {"role": "user", "content": '[Prompt]\n"' + prompt + '"'}
-        ]
-    )
-    msg = completion.choices[0].message.content
-    phrases.append(msg)
+  # need the check_content_length for documents that have
+  # no sections in them
+
+  completion = client.chat.completions.create(
+    model = "gpt4",
+    temperature = round(random.uniform(0,1), 1),
+    messages=[
+      {"role": "system", "content": '[Document Title] \n"' + title + '"\n\n[Document Content]\n<<' + section + ">>\n###\n"},
+      {"role": "user", "content": '[Prompt]\n"' + prompt + '"'}
+    ]
+  )
+  msg = completion.choices[0].message.content
   
-  return (phrases,title)
+  return msg
