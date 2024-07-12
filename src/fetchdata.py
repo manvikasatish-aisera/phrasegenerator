@@ -12,8 +12,17 @@ def get_doc_title(dict, doc_key):
             break
     return doc_title
 
+def get_document_key(dict, doc_title):
+    doc_key = 0
+    for dic in dict:
+        if dic['title'] == doc_title:
+            doc_key = dic['documentKey']
+            break
+    return doc_key
+
 def no_section_document():
     print("Try another api, document doesn't contain sections")
+    print("or document does not exist.")
 
 def retrieve_data(promptNum):
     utterances = []
@@ -22,6 +31,10 @@ def retrieve_data(promptNum):
 
     document_url = f'http://localhost:8088/tenant-server/v1/tenants/{tenant}/external-documents/check-health?botId={botid}' 
     response = requests.get(document_url)
+
+    # implement better error handling, throw exceptions instead of print statements. 
+    if response.status_code != 200:
+        print("Could not find bot. Please try again.")
 
     resp_text = response.text
     dict = json.loads(resp_text)

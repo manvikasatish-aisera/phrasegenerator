@@ -4,7 +4,6 @@ from datetime import datetime
 from openaigen import *
 from fetchdata import * 
 import openpyxl
-import requests
 
 def iterate_docs(promptNum):
     currenttime = datetime.now().strftime('%Y-%m-%d_%H:%M:%S')
