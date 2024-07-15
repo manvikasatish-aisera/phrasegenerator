@@ -7,10 +7,10 @@ import openpyxl
 import boto3
 
 def iterate_docs(promptNum):
-    cluster = input('Cluster: ')
+    # cluster = input('Cluster: ')
     utterances = retrieve_data(promptNum)
 
-    s3 = boto3.client('s3')
+    # s3 = boto3.client('s3')
     # s3.meta.client.upload_file('/tmp/hello.txt', 'mybucket', 'hello.txt')
 
     # s3.upload_file(
