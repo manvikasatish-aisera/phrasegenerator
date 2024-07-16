@@ -25,36 +25,38 @@ def no_section_document():
     print("Try another api, document doesn't contain sections")
     print("or document does not exist.")
 
-def retrieve_data(promptNum):
+def retrieve_data(tenant, botid, doc_key, promptNum):
     utterances = []
     # right now its uat
-    tenant = input('Tenant: ')
-    botid = input('Bot ID: ')
-    doc_key = input('Document key: ')
+    # tenant = input('Tenant: ')
+    # botid = input('Bot ID: ')
+    # doc_key = input('Document key: ')
 
     # up for change
     # num_docs = 25 
 
-    document_url = f'http://localhost:8088/tenant-server/v1/tenants/{tenant}/external-documents/check-health?botId={botid}' 
-    response = requests.get(document_url)
+    # document_url = f'http://localhost:8088/tenant-server/v1/tenants/{tenant}/external-documents/check-health?botId={botid}' 
+    # params = {
+    #     'limit': 25
+    # }
+    # response = requests.get(document_url, params=params)
 
-    print(response.status_code)
+    # print(response.status_code)
     # implement better error handling, throw exceptions instead of print statements. fix this section
     # if response.status_code != 200:
     #     print("cluster, tenant, or bot id does not exist or is incorrect. Please try again.")
 
-    resp_text = response.text
-    dict = json.loads(resp_text)
+    # resp_text = response.text
+    # dict = json.loads(resp_text)
     # for dic in dict:
     #     print(dic)
 
     # print(len(dict))
 
-    doc_title = get_doc_title(dict, doc_key)
+    # doc_title = get_doc_title(dict, doc_key)
 
     sections_url = f'http://localhost:8088/tenant-server/v1/tenants/{tenant}/external-documents/retrieve-sections?documentKey={doc_key}&isCommitted=true'
     resp = requests.get(sections_url)
-    print(resp.text)
 
     if resp.status_code != 200:
         # no sections found in the document, try another api
@@ -68,5 +70,5 @@ def retrieve_data(promptNum):
         for section in section_dict:
             sect = section['renderContent']
             if sect != None:
-              utterances.append(send_prompt_with_document(sect, promptNum, doc_title))
-    return (utterances, doc_title)
+              utterances.append(send_prompt_with_document(sect, promptNum, str(doc_key)))
+    return (utterances, str(doc_key))
