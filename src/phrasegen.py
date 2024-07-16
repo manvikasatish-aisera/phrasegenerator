@@ -66,13 +66,12 @@ def iterate_docs(cluster, tenant, bot):
             doc_key = int(row[0])
             section_url = f'http://localhost:8088/tenant-server/v1/tenants/{tenant}/external-documents/retrieve-sections?documentKey={doc_key}&isCommitted=true'
             response = requests.get(section_url)
-            print('...')
 
             if response.status_code == 200:
                 title = get_doc_title(docs, doc_key)
                 if title is None:
                     title = f'No Title. Document Key: {doc_key}'
-                print(title, doc_key)
+
                 utterances = retrieve_data(tenant, bot, doc_key, title, promptNum)
                 postprocess(utterances, csv_file)
                 row_count += 1
@@ -93,7 +92,6 @@ def iterate_docs(cluster, tenant, bot):
     workbook.save(f"results/{cluster}_tenant{tenant}_botid{bot}_excel_{currenttime}.xlsx")
 
 def retrieve_docs(tenant, botid):
- print('retrieving docs')
  document_url = f'http://localhost:8088/tenant-server/v1/tenants/{tenant}/external-documents/check-health?botId={botid}&limit=25' 
  response = requests.get(document_url)
  response_text = response.text
@@ -115,5 +113,4 @@ def postprocess(list,csvfile):
         writetocsv.writerow(list)
 
 run_kube_commands(cluster)
-print('portforward done')
 iterate_docs(cluster, tenant, bot)
