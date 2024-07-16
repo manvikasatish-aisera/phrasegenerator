@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 def returnDate(file_name): #needs file_name to follow the naming format
     return file_name[file_name[:file_name.rfind("_")-1].rfind("_")+1 : file_name.rfind(".")]
 
-def uploadFile_to_S3():
+def uploadFile_to_S3(cluster, tenant, bot ):
     latest_file = None
     for filename in os.listdir("results"):
         if filename[filename.rfind("."):] != ".DS_Store":
@@ -16,8 +16,8 @@ def uploadFile_to_S3():
 
 
 
-    bucket_name = "aiseratenants-uat"
-    s3_folderPath = "10000/KBPhrases/botid740/" + str(latest_file)
+    bucket_name = f"aiseratenants-{cluster}" 
+    s3_folderPath = f"{tenant}/botid{bot}/KBPhrases" + str(latest_file)
 
     load_dotenv()
     session = boto3.Session(
