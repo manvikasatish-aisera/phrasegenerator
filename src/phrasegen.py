@@ -5,6 +5,50 @@ from openaigen import *
 from fetchdata import * 
 import openpyxl
 import requests
+import sys
+import subprocess
+import time
+
+cluster = sys.argv[1]
+tenant = sys.argv[2]
+bot = sys.argv[3]
+
+print("Environment:", cluster)
+print("Tenant:", tenant)
+print("Source bot_id:", bot)
+
+def run_kube_commands(env):
+    port_forward_db_command = "kubectl port-forward service/tenant-server 8088:8088 &"
+
+    if env in ["dev0", "dev2", "dev4", "dev6", "uat"]:
+        context_command = "kubectl config use-context aws-007"
+        namespace_command = "kubens " + env
+
+    elif env in ["staging0", "poc0"]:
+        context_command = "kubectl config use-context aws-hood-stg"
+        namespace_command = "kubens " + env
+
+    elif env == "prod0" :
+        context_command = "kubectl config use-context aws-hood-prod"
+        namespace_command = "kubens " + env
+
+    elif env == "prod1" :
+        context_command = "kubectl config use-context aws-hood-prod1"
+        namespace_command = "kubens " + env
+
+    elif env == "azure-prod" :
+        context_command = "kubectl config use-context aisera-katmai-prod-aks"
+        namespace_command = "kubens prod"
+
+    # Kill any existing kubectl process
+    subprocess.run("pkill kubectl", shell=True)
+
+    subprocess.run(context_command, shell=True, check=True)
+    subprocess.run(namespace_command, shell=True, check=True)
+    subprocess.run(port_forward_db_command, shell=True, check=True)
+    print('reached this point.')
+    time.sleep(5)
+
 
 def iterate_docs(cluster, tenant, bot):
     promptNum = 4
@@ -22,6 +66,7 @@ def iterate_docs(cluster, tenant, bot):
             doc_key = int(row[0])
             section_url = f'http://localhost:8088/tenant-server/v1/tenants/{tenant}/external-documents/retrieve-sections?documentKey={doc_key}&isCommitted=true'
             response = requests.get(section_url)
+            print('...')
 
             if response.status_code == 200:
                 title = get_doc_title(docs, doc_key)
@@ -48,11 +93,11 @@ def iterate_docs(cluster, tenant, bot):
     workbook.save(f"results/{cluster}_tenant{tenant}_botid{bot}_excel_{currenttime}.xlsx")
 
 def retrieve_docs(tenant, botid):
+ print('retrieving docs')
  document_url = f'http://localhost:8088/tenant-server/v1/tenants/{tenant}/external-documents/check-health?botId={botid}&limit=25' 
  response = requests.get(document_url)
  response_text = response.text
  dict = json.loads(response_text)
- print(len(dict))
 
  return dict
 
@@ -69,5 +114,6 @@ def postprocess(list,csvfile):
         writetocsv = csv.writer(file)
         writetocsv.writerow(list)
 
-
-iterate_docs('uat', 10000, 740)
+run_kube_commands(cluster)
+print('portforward done')
+iterate_docs(cluster, tenant, bot)

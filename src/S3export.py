@@ -14,8 +14,6 @@ def uploadFile_to_S3():
             if latest_file is None or datetime.strptime(returnDate(file_path),"%Y-%m-%d_%H:%M:%S") > datetime.strptime(returnDate(latest_file),"%Y-%m-%d_%H:%M:%S"):
                 latest_file = file_path
 
-
-
     bucket_name = "aiseratenants-uat"
     s3_folderPath = "10000/KBPhrases/botid740/" + str(latest_file)
 
