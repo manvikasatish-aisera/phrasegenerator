@@ -6,17 +6,15 @@ from fetchdata import *
 import openpyxl
 import requests
 
-def iterate_docs(promptNum):
-    cluster = str(input('Cluster: '))
-    tenant = int(input('Tenant ID: '))
-    bot = int(input('Bot ID: '))
+def iterate_docs(cluster, tenant, bot):
+    promptNum = 4
 
     docs = retrieve_docs(tenant, bot)
 
     currenttime = datetime.now().strftime('%Y-%m-%d_%H:%M:%S')
-    csv_file = os.path.join("results",f"{cluster}_tenant{tenant}_botid{bot}_csv_{currenttime}.csv")
+    csv_file = os.path.join("../results",f"{cluster}_tenant{tenant}_botid{bot}_csv_{currenttime}.csv")
 
-    with open('src/documentKeys.csv') as file_obj:
+    with open('documentKeys.csv') as file_obj:
         row_count = 0 
         reader_obj = csv.reader(file_obj) 
 
@@ -50,10 +48,11 @@ def iterate_docs(promptNum):
     workbook.save(f"results/{cluster}_tenant{tenant}_botid{bot}_excel_{currenttime}.xlsx")
 
 def retrieve_docs(tenant, botid):
- document_url = f'http://localhost:8088/tenant-server/v1/tenants/{tenant}/external-documents/check-health?botId={botid}' 
+ document_url = f'http://localhost:8088/tenant-server/v1/tenants/{tenant}/external-documents/check-health?botId={botid}&limit=25' 
  response = requests.get(document_url)
  response_text = response.text
  dict = json.loads(response_text)
+ print(len(dict))
 
  return dict
 
@@ -70,5 +69,5 @@ def postprocess(list,csvfile):
         writetocsv = csv.writer(file)
         writetocsv.writerow(list)
 
-promptNum = 4
-iterate_docs(promptNum)
+
+iterate_docs('uat', 10000, 740)
