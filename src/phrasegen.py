@@ -58,14 +58,17 @@ def run_kube_commands(env):
 
 def iterate_docs(cluster, tenant, bot):
     promptNum = 4
-    numDocs = 1
+    numDocs = 20
 
     docs = retrieve_docs(tenant, bot)
     print("iterating through the docs")
     with open('./src/documentKeys.csv') as file_obj:
         row_count = 0 
         reader_obj = csv.reader(file_obj) 
-
+        
+        workbook = openpyxl.Workbook()
+        sheet = workbook.active
+        
         for row in reader_obj: 
             doc_key = int(row[0])
             section_url = f'http://localhost:8088/tenant-server/v1/tenants/{tenant}/external-documents/retrieve-sections?documentKey={doc_key}&isCommitted=true'
@@ -79,25 +82,18 @@ def iterate_docs(cluster, tenant, bot):
                     source_url = f'No URL. Document Key: {doc_key}'
 
                 utterances = retrieve_data(tenant, doc_key, title, source_url)
+                
+                start_row = 1 if sheet.max_row == 0 else sheet.max_row + 1
+                for col_index, item in enumerate(utterances,start=1):
+                    sheet.cell(row=start_row,column=col_index,value=item)
+                     
                 row_count += 1
             if row_count >= numDocs:
                 break
-                
-    workbook = openpyxl.Workbook()
-    sheet = workbook.active
-
-    if sheet['A1'].value == None:
-        sheet.cell(sheet.max_row,1,utterances[1])
-    else:
-        sheet.cell(sheet.max_row+1,1,utterances[1])
-                        
-    for i in range(len(utterances[0])):
-        sheet.cell(sheet.max_row,i+2,utterances[0][i])
-                        
-    workbook.save(f"./results/{cluster}_tenant{tenant}_botid{bot}_excel_{date_time}.xlsx")
-
-    uploadFile_to_S3(cluster, tenant, bot)
-
+        
+        workbook.save(f"./results/{cluster}_tenant{tenant}_botid{bot}_excel_{date_time}.xlsx")        
+        uploadFile_to_S3(cluster, tenant, bot)
+    
 def retrieve_docs(tenant, botid):
  print("retrieving the docs")
  document_url = f'http://localhost:8088/tenant-server/v1/tenants/{tenant}/external-documents/check-health?botId={botid}' 
