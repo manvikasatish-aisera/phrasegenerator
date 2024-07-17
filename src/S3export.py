@@ -3,19 +3,23 @@ import os
 from datetime import datetime
 from dotenv import load_dotenv
 
-def returnDate(file_name): # needs file_name to follow the naming format
-    return file_name[file_name[:file_name.rfind("_")-1].rfind("_")+1 : file_name.rfind(".")]
+def returnDate(file_name): #needs file_name to follow the naming format
+    startIndex = filename.rfind("excel") + 6
+    endIndex = filename.rfind(".")
+    return file_name[startIndex : endIndex]
 
 def uploadFile_to_S3(cluster, tenant, bot ):
     latest_file = None
-    for filename in os.listdir("../results"):
+    for filename in os.listdir("results"):
         if filename[filename.rfind("."):] != ".DS_Store":
-            file_path = os.path.join("../results", filename)
+            file_path = os.path.join("results", filename)
             if latest_file is None or datetime.strptime(returnDate(file_path),"%Y_%m_%d_%H_%M") > datetime.strptime(returnDate(latest_file),"%Y_%m_%d_%H_%M"):
                 latest_file = file_path
 
+
+
     bucket_name = f"aiseratenants-{cluster}" 
-    s3_folderPath = f"{tenant}/KBPhrases/botid{bot}/" + str(latest_file)
+    s3_folderPath = f"{tenant}/botid{bot}/KBPhrases" + str(latest_file)
 
     load_dotenv()
     session = boto3.Session(
@@ -27,3 +31,11 @@ def uploadFile_to_S3(cluster, tenant, bot ):
 
     s3.upload_file(latest_file, bucket_name, s3_folderPath)
     print(f'File -{latest_file}- uploaded to S3 bucket: {bucket_name}')
+    
+    
+latest_file = None
+for filename in os.listdir("results"):
+    if filename[filename.rfind("."):] != ".DS_Store":
+        file_path = os.path.join("results", filename)
+        if latest_file is None or datetime.strptime(returnDate(file_path),"%Y_%m_%d_%H_%M_%S") > datetime.strptime(returnDate(latest_file),"%Y_%m_%d_%H_%M_%S"):
+            latest_file = file_path
