@@ -24,7 +24,7 @@ app.get('/:cluster?/:tenantName?/:botId?', urlencodedParser, function (req, res)
             var date_time = current_date + "_" + current_time;
 
             excel_filename = cluster + "_tenant" + tenantName + "_botid" + botId + "_excel_" + date_time + ".xlsx";
-            response_string = "please check for your phrases file at aiseratenants-" + cluster + "/" + tenantName + "/KBPhrases/botid" + botId + "/results/" + excel_filename;
+            response_string = "please check for your phrases file on s3 aiseratenants-" + cluster + "/" + tenantName + "/KBPhrases/botid" + botId + "/results/" + excel_filename;
 
             args = [cluster, tenantName, botId, date_time]
             runPythonScript(args);
