@@ -16,8 +16,6 @@ def uploadFile_to_S3(cluster, tenant, bot ):
             if latest_file is None or datetime.strptime(returnDate(file_path),"%Y_%m_%d_%H_%M") > datetime.strptime(returnDate(latest_file),"%Y_%m_%d_%H_%M"):
                 latest_file = file_path
 
-
-
     bucket_name = f"aiseratenants-{cluster}" 
     s3_folderPath = f"{tenant}/KBPhrases/botid{bot}/" + str(latest_file)
 
