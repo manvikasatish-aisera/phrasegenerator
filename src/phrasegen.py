@@ -92,7 +92,7 @@ def iterate_docs(cluster, tenant, bot):
     for i in range(len(utterances[0])):
         sheet.cell(sheet.max_row,i+2,utterances[0][i])
                         
-    workbook.save(f"../results/{cluster}_tenant{tenant}_botid{bot}_excel_{date_time}.xlsx")
+    workbook.save(f"./results/{cluster}_tenant{tenant}_botid{bot}_excel_{date_time}.xlsx")
 
     uploadFile_to_S3(cluster, tenant, bot)
 
