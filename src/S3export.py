@@ -29,3 +29,4 @@ def uploadFile_to_S3(cluster, tenant, bot ):
 
     s3.upload_file(latest_file, bucket_name, s3_folderPath)
     print(f'File -{latest_file}- uploaded to S3 bucket: {bucket_name}')
+    print(f'File -{latest_file}- uploaded to S3 bucket: {bucket_name}')
