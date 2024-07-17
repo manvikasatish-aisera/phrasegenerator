@@ -1,6 +1,6 @@
 import csv
-import os
-from datetime import datetime
+#import os
+#from datetime import datetime
 from openaigen import *
 from fetchdata import * 
 from S3export import *
@@ -58,7 +58,7 @@ def run_kube_commands(env):
 
 def iterate_docs(cluster, tenant, bot):
     promptNum = 4
-    numDocs = 20
+    numDocs = 5
 
     docs = retrieve_docs(tenant, bot)
     print("iterating through the docs")
@@ -83,13 +83,19 @@ def iterate_docs(cluster, tenant, bot):
 
                 utterances = retrieve_data(tenant, doc_key, title, source_url)
                 
-                start_row = 1 if sheet.max_row == 0 else sheet.max_row + 1
-                for col_index, item in enumerate(utterances,start=1):
-                    sheet.cell(row=start_row,column=col_index,value=item)
-                     
+                start_row = 1 if sheet.max_row == 1 else sheet.max_row + 1
+                for i in range(len(utterances)):
+                    for col_index, item in enumerate(utterances[i],start=1):
+                        sheet.cell(row=start_row,column=col_index,value=item)
+                        
                 row_count += 1
             if row_count >= numDocs:
                 break
+            
+        sheet.cell(1,1,"Doc Title")
+        sheet.cell(1,2,"Section Title")
+        sheet.cell(1,3,"URL")
+        sheet.cell(1,4,"Utterance/Phrase")
         
         workbook.save(f"./results/{cluster}_tenant{tenant}_botid{bot}_excel_{date_time}.xlsx")        
         uploadFile_to_S3(cluster, tenant, bot)
