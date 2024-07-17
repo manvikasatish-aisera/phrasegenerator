@@ -28,8 +28,8 @@ app.get('/:cluster?/:tenantName?/:botId?', urlencodedParser, function (req, res)
 
             args = [cluster, tenantName, botId, date_time]
             runPythonScript(args);
+            res.end(response_string)
 
-            res.end("running script for "  + tenantName + ", " + cluster + ", " + botId + "...");
  })
 
  const { spawn } = require('child_process');
