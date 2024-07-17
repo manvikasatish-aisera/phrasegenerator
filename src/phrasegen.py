@@ -72,11 +72,13 @@ def iterate_docs(cluster, tenant, bot):
             response = requests.get(section_url)
 
             if response.status_code == 200:
-                title = get_doc_title(docs, doc_key)
+                title, source_url = get_doc_title_and_source(docs, doc_key)
                 if title is None:
                     title = f'No Title. Document Key: {doc_key}'
+                if source_url is None:
+                    source_url = f'No URL. Document Key: {doc_key}'
 
-                utterances = retrieve_data(tenant, bot, doc_key, title, promptNum)
+                utterances = retrieve_data(tenant, doc_key, title, source_url)
                 row_count += 1
             if row_count >= numDocs:
                 break
@@ -105,13 +107,15 @@ def retrieve_docs(tenant, botid):
 
  return dict
 
-def get_doc_title(docs, doc_key):
+def get_doc_title_and_source(docs, doc_key):
     doc_title = ''
     for doc in docs:
         if doc['documentKey'] == doc_key:
             doc_title = doc['title']
+            source_url = doc['source']
             break
-    return doc_title
+    return doc_title, source_url
+
 
 def postprocess(list,csvfile):
     with open(csvfile, 'a', newline='') as file:

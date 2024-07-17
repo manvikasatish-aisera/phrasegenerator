@@ -46,7 +46,7 @@ def check_content_length(filetext, prompt, title):
         content = [filetext]
     return content
        
-def send_prompt_with_document(section, promptNum, title):
+def send_prompt_with_document(section, title):
   load_dotenv()
   api_version = os.getenv('OPENAI_API_VERSION')
   api_key = os.getenv('OPENAI_API_KEY')
