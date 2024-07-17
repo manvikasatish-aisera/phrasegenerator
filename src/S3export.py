@@ -3,7 +3,7 @@ import os
 from datetime import datetime
 from dotenv import load_dotenv
 
-def returnDate(file_name): #needs file_name to follow the naming format
+def returnDate(file_name): #needs file_name to follow the naming format: <cluster>_tenant<tenant>_botid<botid>_excel_year_month_day_hour_minute.xlsx
     startIndex = file_name.rfind("excel") + 6
     endIndex = file_name.rfind(".")
     return file_name[startIndex : endIndex]
