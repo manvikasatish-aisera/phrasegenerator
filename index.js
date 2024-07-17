@@ -32,26 +32,28 @@ app.get('/:cluster?/:tenantName?/:botId?', urlencodedParser, function (req, res)
             res.end("running script for "  + tenantName + ", " + cluster + ", " + botId + "...");
  })
 
-function runPythonScript(args) {
-    const { exec } = require('child_process');
-    console.log(args)
-    const pythonScriptPath = path.join(__dirname, 'src', 'phrasegen.py');
-
-    exec (`python3 ${pythonScriptPath} ${args[0]} ${args[1]} ${args[2]} ${args[3]}`, (error, stdout, stderr) => {
-        if (error) {
-            console.error(`Error executing script: ${error.message}`);
-            return;
-        }
-        if (stderr) {
-            console.error(`Script stderr: ${stderr}`);
-            return;
-        }
-    
-        console.log(`${stdout}`);
-        const result = stdout.trim();
-        console.log(result);
-    });
-}
+ const { spawn } = require('child_process');
+ 
+ function runPythonScript(args) {
+     const pythonScriptPath = path.join(__dirname, 'src', 'phrasegen.py');
+     
+     const pythonProcess = spawn('python3', [pythonScriptPath, ...args]);
+ 
+     pythonProcess.stdout.on('data', (data) => {
+         console.log(`stdout: ${data}`);
+     });
+ 
+     pythonProcess.stderr.on('data', (data) => {
+         console.error(`stderr: ${data}`);
+     });
+ 
+     pythonProcess.on('close', (code) => {
+         if (code !== 0) {
+             console.error(`Python script exited with code ${code}`);
+         }
+     });
+ }
+ 
 // views directory
 app.set('views', path.join(__dirname, 'views'));
 
