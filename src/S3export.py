@@ -4,8 +4,8 @@ from datetime import datetime
 from dotenv import load_dotenv
 
 def returnDate(file_name): #needs file_name to follow the naming format
-    startIndex = filename.rfind("excel") + 6
-    endIndex = filename.rfind(".")
+    startIndex = file_name.rfind("excel") + 6
+    endIndex = file_name.rfind(".")
     return file_name[startIndex : endIndex]
 
 def uploadFile_to_S3(cluster, tenant, bot ):
@@ -19,7 +19,7 @@ def uploadFile_to_S3(cluster, tenant, bot ):
 
 
     bucket_name = f"aiseratenants-{cluster}" 
-    s3_folderPath = f"{tenant}/botid{bot}/KBPhrases" + str(latest_file)
+    s3_folderPath = f"{tenant}/KBPhrases/botid{bot}/" + str(latest_file)
 
     load_dotenv()
     session = boto3.Session(
@@ -33,9 +33,6 @@ def uploadFile_to_S3(cluster, tenant, bot ):
     print(f'File -{latest_file}- uploaded to S3 bucket: {bucket_name}')
     
     
-latest_file = None
-for filename in os.listdir("results"):
-    if filename[filename.rfind("."):] != ".DS_Store":
-        file_path = os.path.join("results", filename)
-        if latest_file is None or datetime.strptime(returnDate(file_path),"%Y_%m_%d_%H_%M_%S") > datetime.strptime(returnDate(latest_file),"%Y_%m_%d_%H_%M_%S"):
-            latest_file = file_path
+
+        
+uploadFile_to_S3('uat',10000,740)
