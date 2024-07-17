@@ -51,16 +51,6 @@ def send_prompt_with_document(section, promptNum, title):
   api_version = os.getenv('OPENAI_API_VERSION')
   api_key = os.getenv('OPENAI_API_KEY')
   azure_endpoint = os.getenv('OPENAI_AZURE_ENDPOINT')
-
-  # don't think we need lines 60-63 anymore because the documents are all pretty
-  # much HTML, at least the rendered content, have to double check
-  # with the other api, but all the ones that are under this api
-  # have html text. 
-
-  # if filepath.endswith('.pdf'):
-  #   document_text = extractText__pdf(filepath) 
-  # if filepath.endswith('.html'):
-  #   document_text = extractText_html(filepath)
   
   prompt = "Assume the role of a user of a generative AI product. Given the contents of a document and its title, generate a single question, phrase, or statement that is coherent english. The question, statement, or phrase should be short in length, and cover either main ideas, specific details, or implications, and can use slang, short forms of words, etc. Do not include the document title or role of the user in your response. Do not include any escape characters in your response. Each phrase must refer to the main entity in the title or the content text, and be unique and cover something different about the document everytime you generate a new one. Ignore images and HTML tags, and ensure you don't pull phrases straight from the document."
 
@@ -68,11 +58,6 @@ def send_prompt_with_document(section, promptNum, title):
         api_version = api_version,
         api_key = api_key,
         azure_endpoint = azure_endpoint)
-  
-  # split = check_content_length(document_text, prompt, title)
-
-  # need the check_content_length for documents that have
-  # no sections in them
 
   completion = client.chat.completions.create(
     model = "gpt4",

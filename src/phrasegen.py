@@ -3,21 +3,26 @@ import os
 from datetime import datetime
 from openaigen import *
 from fetchdata import * 
+from S3export import *
 import openpyxl
 import requests
 import sys
 import subprocess
 import time
 
+print("got to this point.")
 cluster = sys.argv[1]
 tenant = sys.argv[2]
 bot = sys.argv[3]
+date_time = sys.argv[4]
 
 print("Environment:", cluster)
 print("Tenant:", tenant)
 print("Source bot_id:", bot)
+print("Date: ", date_time)
 
 def run_kube_commands(env):
+    print("running kube commands")
     port_forward_db_command = "kubectl port-forward service/tenant-server 8088:8088 &"
 
     if env in ["dev0", "dev2", "dev4", "dev6", "uat"]:
@@ -46,19 +51,17 @@ def run_kube_commands(env):
     subprocess.run(context_command, shell=True, check=True)
     subprocess.run(namespace_command, shell=True, check=True)
     subprocess.run(port_forward_db_command, shell=True, check=True)
-    print('reached this point.')
+    print("done portforwarding")
     time.sleep(5)
 
 
 def iterate_docs(cluster, tenant, bot):
     promptNum = 4
+    numDocs = 1
 
     docs = retrieve_docs(tenant, bot)
-
-    currenttime = datetime.now().strftime('%Y-%m-%d_%H:%M:%S')
-    csv_file = os.path.join("../results",f"{cluster}_tenant{tenant}_botid{bot}_csv_{currenttime}.csv")
-
-    with open('documentKeys.csv') as file_obj:
+    print("iterating through the docs")
+    with open('./src/documentKeys.csv') as file_obj:
         row_count = 0 
         reader_obj = csv.reader(file_obj) 
 
@@ -73,9 +76,8 @@ def iterate_docs(cluster, tenant, bot):
                     title = f'No Title. Document Key: {doc_key}'
 
                 utterances = retrieve_data(tenant, bot, doc_key, title, promptNum)
-                postprocess(utterances, csv_file)
                 row_count += 1
-            if row_count >= 25:
+            if row_count >= numDocs:
                 break
                 
     workbook = openpyxl.Workbook()
@@ -89,10 +91,13 @@ def iterate_docs(cluster, tenant, bot):
     for i in range(len(utterances[0])):
         sheet.cell(sheet.max_row,i+2,utterances[0][i])
                         
-    workbook.save(f"results/{cluster}_tenant{tenant}_botid{bot}_excel_{currenttime}.xlsx")
+    workbook.save(f"../results/{cluster}_tenant{tenant}_botid{bot}_excel_{date_time}.xlsx")
+
+    uploadFile_to_S3(cluster, tenant, bot)
 
 def retrieve_docs(tenant, botid):
- document_url = f'http://localhost:8088/tenant-server/v1/tenants/{tenant}/external-documents/check-health?botId={botid}&limit=25' 
+ print("retrieving the docs")
+ document_url = f'http://localhost:8088/tenant-server/v1/tenants/{tenant}/external-documents/check-health?botId={botid}' 
  response = requests.get(document_url)
  response_text = response.text
  dict = json.loads(response_text)
@@ -112,5 +117,7 @@ def postprocess(list,csvfile):
         writetocsv = csv.writer(file)
         writetocsv.writerow(list)
 
+print("starting portforwarding")
 run_kube_commands(cluster)
+print("starting iterating the docs...")
 iterate_docs(cluster, tenant, bot)
