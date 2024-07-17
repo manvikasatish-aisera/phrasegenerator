@@ -24,6 +24,7 @@ print("Date: ", date_time)
 def run_kube_commands(env):
     print("running kube commands")
     port_forward_db_command = "kubectl port-forward service/tenant-server 8088:8088 &"
+    context_command = ""
 
     if env in ["dev0", "dev2", "dev4", "dev6", "uat"]:
         context_command = "kubectl config use-context aws-007"
@@ -119,5 +120,5 @@ def postprocess(list,csvfile):
 
 print("starting portforwarding")
 run_kube_commands(cluster)
-print("starting iterating the docs...")
+print("...")
 iterate_docs(cluster, tenant, bot)
