@@ -21,5 +21,5 @@ def retrieve_data(tenant, doc_key, title, source_url):
             sect = section['renderContent']
             section_title = section['subject']
             if sect != None:
-              utterances.append(title, section_title, source_url, send_prompt_with_document(sect, title))
+              utterances = [title, section_title, source_url, send_prompt_with_document(sect, title)]
     return utterances 
