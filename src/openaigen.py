@@ -1,6 +1,4 @@
 from openai import AzureOpenAI
-from bs4 import BeautifulSoup
-from PyPDF2 import PdfReader
 import tiktoken
 from numpy import random
 import os

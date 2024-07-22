@@ -1,8 +1,6 @@
 import requests
-import fetchdata
 import json 
 from openaigen import *
-import re
 
 def no_section_document():
     print("Try another api, document doesn't contain sections")

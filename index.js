@@ -8,7 +8,6 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 app.use(express.static('public'));
 
-
 // Set EJS as the view engine
 app.set('view engine', 'ejs');
 
