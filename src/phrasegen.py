@@ -59,7 +59,7 @@ def run_kube_commands(env):
 
 
 def iterate_docs(cluster, tenant, bot):
-    numDocs = 20
+    numDocs = 3
     
     if not os.path.isfile(f'../documentInfo/Info_cluster{cluster}_tenant{tenant}_botid{bot}.csv'):
         if not getDocKeys(tenant, bot):
