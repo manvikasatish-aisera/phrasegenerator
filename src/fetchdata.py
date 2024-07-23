@@ -15,11 +15,11 @@ def retrieve_data(tenant, doc_key, title, source_url):
         no_section_document()
 
     else:
-        re = resp.text
-        section_dict = json.loads(re)
+        section_dict = json.loads(resp.text)
         for section in section_dict:
             sect = section['renderContent']
             section_title = section['subject']
             if sect != None:
-              utterances = [title, section_title, source_url, send_prompt_with_document(sect, title)]
+              set1 = [title, section_title, source_url, send_prompt_with_document(sect, title)]
+              utterances.append(set1)
     return utterances 
