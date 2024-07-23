@@ -1,23 +1,8 @@
 from openai import AzureOpenAI
-#from bs4 import BeautifulSoup
-#from PyPDF2 import PdfReader
 import tiktoken
 from numpy import random
 import os
 from dotenv import load_dotenv
-
-# def extractText_html(html_filepath):
-#   with open(html_filepath, 'r', encoding = 'utf-8') as file:
-#     soup = BeautifulSoup(file, 'html.parser')
-#     document_text = soup.get_text()
-#   return document_text    
-
-# def extractText__pdf(pdf_filepath):
-#     document_text = ''
-#     reader = PdfReader(pdf_filepath)
-#     for i in reader.pages:
-#       document_text += i.extract_text()
-#     return document_text
 
 def count_tokens(text):
     encoding = tiktoken.get_encoding("cl100k_base")

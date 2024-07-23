@@ -1,5 +1,4 @@
 import requests
-#import fetchdata
 import json 
 from openaigen import *
 
