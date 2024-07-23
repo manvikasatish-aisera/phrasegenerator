@@ -1,0 +1,7 @@
+boto3
+openai
+tiktoken
+openpyxl
+numpy
+requests
+python-dotenv

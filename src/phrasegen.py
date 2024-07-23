@@ -12,7 +12,6 @@ print("got to this point.")
 cluster = sys.argv[1]
 tenant = sys.argv[2]
 bot = sys.argv[3]
-#date_time = sys.argv[4]
 
 now = datetime.now()
 date_time = now.strftime("%Y_%m_%d_%H_%M")
@@ -60,15 +59,15 @@ def run_kube_commands(env):
 def iterate_docs(cluster, tenant, bot):
     numDocs = 5
     
-    if not os.path.isfile(f'./documentKeys/Keys_cluster{cluster}_tenant{tenant}_botid{bot}.csv'):
+    if not os.path.isfile(f'../documentKeys/Keys_cluster{cluster}_tenant{tenant}_botid{bot}.csv'):
         if not getDocKeys(tenant, bot):
-            print("incorrect combo of cluster/tenant/bot")
+            print("Incorrect combination of cluster/tenant/bot")
             raise SystemExit
         print("First time accessing this bot, gathering all documents...")
 
     docs = retrieve_docs(tenant, bot)
     print("iterating through the docs")
-    with open('./src/documentKeys.csv') as file_obj:
+    with open(f'../documentKeys/Keys_cluster{cluster}_tenant{tenant}_botid{bot}.csv') as file_obj:
         row_count = 0 
         reader_obj = csv.reader(file_obj) 
         
@@ -103,7 +102,7 @@ def iterate_docs(cluster, tenant, bot):
         sheet.cell(1,3,"URL")
         sheet.cell(1,4,"Utterance/Phrase")
         
-        workbook.save(f"./results/{cluster}_tenant{tenant}_botid{bot}_excel_{date_time}.xlsx")        
+        workbook.save(f"../results/{cluster}_tenant{tenant}_botid{bot}_excel_{date_time}.xlsx")        
         uploadFile_to_S3(cluster, tenant, bot)
     
 def retrieve_docs(tenant, botid):
@@ -124,18 +123,21 @@ def get_doc_title_and_source(docs, doc_key):
             break
     return doc_title, source_url
 
-
-def postprocess(list,csvfile):
+def postprocess(list, csvfile):
     with open(csvfile, 'a', newline='') as file:
         writetocsv = csv.writer(file)
         writetocsv.writerow(list)
 
-def getDocKeys(tenant,botid):
+def getDocKeys(tenant, botid):
     try:
+        print("made it into try")
+        print("cluster", cluster)
+        print("tenant", tenant)
+        print("botid", botid)
         response = json.loads(requests.get(f"http://localhost:8088/tenant-server/v1/tenants/{tenant}/external-documents/check-health?botId={botid}").text)
     except:
         return False
-    file_path = f"scripts/Phrase_Generator/documentKeys/Keys_clusteruat_tenant{tenant}_botid{botid}.csv"
+    file_path = f"../documentKeys/Keys_clusteruat_tenant{tenant}_botid{botid}.csv"
     with open(file_path, 'w', newline='') as csvfile:
         csvwriter = csv.writer(csvfile)
         for item in response:
@@ -144,6 +146,6 @@ def getDocKeys(tenant,botid):
 
 
 print("starting portforwarding")
-run_kube_commands(cluster)
+# run_kube_commands(cluster)
 print("...")
 iterate_docs(cluster, tenant, bot)
