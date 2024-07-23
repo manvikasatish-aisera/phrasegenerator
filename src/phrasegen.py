@@ -1,6 +1,6 @@
+'''MUST RUN CODE FROM SRC IN DIRECTORY'''
+
 import csv
-#import os
-#from datetime import datetime
 from openaigen import *
 from fetchdata import * 
 from S3export import *
@@ -10,7 +10,6 @@ import sys
 import subprocess
 import time
 
-print("got to this point.")
 cluster = sys.argv[1]
 tenant = sys.argv[2]
 bot = sys.argv[3]
@@ -60,9 +59,9 @@ def run_kube_commands(env):
 
 
 def iterate_docs(cluster, tenant, bot):
-    numDocs = 5
+    numDocs = 20
     
-    if not os.path.isfile(f'./documentKeys/Keys_cluster{cluster}_tenant{tenant}_botid{bot}.csv'):
+    if not os.path.isfile(f'../documentInfo/Info_cluster{cluster}_tenant{tenant}_botid{bot}.csv'):
         if not getDocKeys(tenant, bot):
             print("incorrect combo of cluster/tenant/bot")
             raise SystemExit
@@ -70,7 +69,7 @@ def iterate_docs(cluster, tenant, bot):
 
     docs = retrieve_docs(tenant, bot)
     print("iterating through the docs")
-    with open('./src/documentKeys.csv') as file_obj:
+    with open(f'../documentInfo/Info_cluster{cluster}_tenant{tenant}_botid{bot}.csv') as file_obj:
         row_count = 0 
         reader_obj = csv.reader(file_obj) 
         
@@ -79,11 +78,12 @@ def iterate_docs(cluster, tenant, bot):
         
         for row in reader_obj: 
             doc_key = int(row[0])
+            source_url = row[1]
+            title = row[2]
             section_url = f'http://localhost:8088/tenant-server/v1/tenants/{tenant}/external-documents/retrieve-sections?documentKey={doc_key}&isCommitted=true'
             response = requests.get(section_url)
 
             if response.status_code == 200:
-                title, source_url = get_doc_title_and_source(docs, doc_key)
                 if title is None:
                     title = f'No Title. Document Key: {doc_key}'
                 if source_url is None:
@@ -91,8 +91,8 @@ def iterate_docs(cluster, tenant, bot):
 
                 utterances = retrieve_data(tenant, doc_key, title, source_url)
                 
-                start_row = 1 if sheet.max_row == 1 else sheet.max_row + 1
                 for i in range(len(utterances)):
+                    start_row = sheet.max_row + 1
                     for col_index, item in enumerate(utterances[i],start=1):
                         sheet.cell(row=start_row,column=col_index,value=item)
                         
@@ -105,17 +105,17 @@ def iterate_docs(cluster, tenant, bot):
         sheet.cell(1,3,"URL")
         sheet.cell(1,4,"Utterance/Phrase")
         
-        workbook.save(f"./results/{cluster}_tenant{tenant}_botid{bot}_excel_{date_time}.xlsx")        
+        workbook.save(f"../results/{cluster}_tenant{tenant}_botid{bot}_excel_{date_time}.xlsx")        
         uploadFile_to_S3(cluster, tenant, bot)
     
 def retrieve_docs(tenant, botid):
- print("retrieving the docs")
- document_url = f'http://localhost:8088/tenant-server/v1/tenants/{tenant}/external-documents/check-health?botId={botid}' 
- response = requests.get(document_url)
- response_text = response.text
- dict = json.loads(response_text)
+    print("retrieving the docs")
+    document_url = f'http://localhost:8088/tenant-server/v1/tenants/{tenant}/external-documents/check-health?botId={botid}' 
+    response = requests.get(document_url)
+    response_text = response.text
+    dict = json.loads(response_text)
 
- return dict
+    return dict
 
 def get_doc_title_and_source(docs, doc_key):
     doc_title = ''
@@ -137,11 +137,11 @@ def getDocKeys(tenant,botid):
         response = json.loads(requests.get(f"http://localhost:8088/tenant-server/v1/tenants/{tenant}/external-documents/check-health?botId={botid}").text)
     except:
         return False
-    file_path = f"scripts/Phrase_Generator/documentKeys/Keys_clusteruat_tenant{tenant}_botid{botid}.csv"
+    file_path = f"../documentInfo/Info_clusteruat_tenant{tenant}_botid{botid}.csv"
     with open(file_path, 'w', newline='') as csvfile:
         csvwriter = csv.writer(csvfile)
         for item in response:
-            csvwriter.writerow([item.get("documentKey")])
+            csvwriter.writerow([item.get("documentKey") , item.get("source") , item.get("title")])
     return True
 
 
