@@ -13,7 +13,7 @@ tenant = os.getenv('TENANT')
 bot = os.getenv('BOT_ID')
 num_docs = int(os.getenv('NUM_DOCS'))
 port_number = int(os.getenv('PORT_NUM'))
-host_ip = int(os.getenv('HOST_IP'))
+host_ip = os.getenv('HOST_IP')
 
 now = datetime.now()
 date_time = now.strftime("%Y_%m_%d_%H_%M")
@@ -97,7 +97,7 @@ def postprocess(list,csvfile):
         writetocsv = csv.writer(file)
         writetocsv.writerow(list)
 
-def getDocKeys(tenant,botid):
+def getDocKeys(tenant, botid):
     try:
         url = f"http://{host_ip}:{port_number}/tenant-server/v1/tenants/{tenant}/external-documents/check-health?botId={botid}"
         print(url)
