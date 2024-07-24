@@ -30,8 +30,6 @@ def get_secret_key_v1(vault_address, github_token, secret_path, key):
 
     return response_token
   
-
-
 def get_channel_token_from_vault(path, key):
     vault_address = os.getenv('VAULT_ADDR')
     github_token = os.getenv('GITHUB_TOKEN')
