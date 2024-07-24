@@ -9,7 +9,7 @@ def no_section_document():
 
 def retrieve_data(tenant, doc_key, title, source_url, port_number):
     utterances = []
-    sections_url = f'http://host.docker.internal:{port_number}/tenant-server/v1/tenants/{tenant}/external-documents/retrieve-sections?documentKey={doc_key}&isCommitted=true'
+    sections_url = f'http://172.17.0.1:{port_number}/tenant-server/v1/tenants/{tenant}/external-documents/retrieve-sections?documentKey={doc_key}&isCommitted=true'
     resp = requests.get(sections_url)
 
     if resp.status_code != 200:
