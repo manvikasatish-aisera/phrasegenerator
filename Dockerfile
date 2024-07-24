@@ -10,7 +10,7 @@ WORKDIR /usr/src/app
 COPY . .
 
 RUN pip install --no-cache-dir -r requirements.txt
-
+RUN chmod +x entrypoint.sh
 # set environment variables
 ENV CLUSTER uat
 ENV TENANT 10000
