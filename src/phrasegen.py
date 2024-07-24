@@ -13,6 +13,7 @@ tenant = os.getenv('TENANT')
 bot = os.getenv('BOT_ID')
 num_docs = int(os.getenv('NUM_DOCS'))
 port_number = int(os.getenv('PORT_NUM'))
+host_ip = int(os.getenv('HOST_IP'))
 
 now = datetime.now()
 date_time = now.strftime("%Y_%m_%d_%H_%M")
@@ -44,7 +45,7 @@ def iterate_docs(cluster, tenant, bot):
             doc_key = int(row[0])
             source_url = row[1]
             title = row[2]
-            section_url = f'http://host.docker.internal:{port_number}/tenant-server/v1/tenants/{tenant}/external-documents/retrieve-sections?documentKey={doc_key}&isCommitted=true'
+            section_url = f'http://{host_ip}:{port_number}/tenant-server/v1/tenants/{tenant}/external-documents/retrieve-sections?documentKey={doc_key}&isCommitted=true'
             response = requests.get(section_url)
 
             if response.status_code == 200:
@@ -53,7 +54,7 @@ def iterate_docs(cluster, tenant, bot):
                 if source_url is None:
                     source_url = f'No URL. Document Key: {doc_key}'
 
-                utterances = retrieve_data(tenant, doc_key, title, source_url, port_number)
+                utterances = retrieve_data(tenant, doc_key, title, source_url, port_number, host_ip)
                 
                 for i in range(len(utterances)):
                     start_row = sheet.max_row + 1
@@ -74,7 +75,7 @@ def iterate_docs(cluster, tenant, bot):
     
 def retrieve_docs(tenant, botid):
     print("retrieving the docs")
-    document_url = f'http://host.docker.internal:{port_number}/tenant-server/v1/tenants/{tenant}/external-documents/check-health?botId={botid}' 
+    document_url = f'http://{host_ip}:{port_number}/tenant-server/v1/tenants/{tenant}/external-documents/check-health?botId={botid}' 
     response = requests.get(document_url)
     response_text = response.text
     dict = json.loads(response_text)
@@ -98,7 +99,7 @@ def postprocess(list,csvfile):
 
 def getDocKeys(tenant,botid):
     try:
-        url = f"http://host.docker.internal:{port_number}/tenant-server/v1/tenants/{tenant}/external-documents/check-health?botId={botid}"
+        url = f"http://{host_ip}:{port_number}/tenant-server/v1/tenants/{tenant}/external-documents/check-health?botId={botid}"
         print(url)
         response = json.loads(requests.get(url).text)
         print("got keys.")
