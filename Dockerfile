@@ -17,8 +17,9 @@ ENV TENANT 10000
 ENV BOT_ID 740
 ENV NUM_DOCS 1
 
-ENTRYPOINT ["python3", "/usr/src/app/src/phrasegen.py"]
-CMD ["uat", "10000", "740"]
+WORKDIR src
+ENTRYPOINT ["python3", "phrasegen.py"]
+CMD ["dev0", "10000", "295"]
 
 # CMD /usr/src/app/test.sh ; sleep infinity
 
