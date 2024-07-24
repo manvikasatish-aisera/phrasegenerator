@@ -25,6 +25,7 @@ print("Environment:", cluster)
 print("Tenant:", tenant)
 print("Source bot_id:", bot)
 print("Date: ", date_time)
+print("Port Number: ", port_number)
 
 def iterate_docs(cluster, tenant, bot):
     # numDocs = 3
@@ -101,8 +102,12 @@ def postprocess(list,csvfile):
 
 def getDocKeys(tenant,botid):
     try:
-        response = json.loads(requests.get(f"http://host.docker.internal:{port_number}/tenant-server/v1/tenants/{tenant}/external-documents/check-health?botId={botid}").text)
+        url = f"http://host.docker.internal:{port_number}/tenant-server/v1/tenants/{tenant}/external-documents/check-health?botId={botid}"
+        print(url)
+        response = json.loads(requests.get(url).text)
+        print("got keys.")
     except:
+        print("failed to get keys.")
         return False
     file_path = f"../documentInfo/Info_cluster{cluster}_tenant{tenant}_botid{botid}.csv"
     with open(file_path, 'w', newline='') as csvfile:
