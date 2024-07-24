@@ -11,6 +11,7 @@ COPY . .
 
 RUN pip install --no-cache-dir -r requirements.txt
 RUN chmod +x entrypoint.sh
+RUN /bin/sh entrypoint.sh
 RUN cat /etc/hosts
 
 # set environment variables
