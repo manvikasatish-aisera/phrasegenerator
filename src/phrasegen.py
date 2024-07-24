@@ -76,7 +76,7 @@ def iterate_docs(cluster, tenant, bot):
         
         for row in reader_obj: 
             doc_key = int(row[0])
-            section_url = f'http://localhost:8088/tenant-server/v1/tenants/{tenant}/external-documents/retrieve-sections?documentKey={doc_key}&isCommitted=true'
+            section_url = f'http://host.docker.internal:8088/tenant-server/v1/tenants/{tenant}/external-documents/retrieve-sections?documentKey={doc_key}&isCommitted=true'
             response = requests.get(section_url)
 
             if response.status_code == 200:
@@ -107,7 +107,7 @@ def iterate_docs(cluster, tenant, bot):
     
 def retrieve_docs(tenant, botid):
  print("retrieving the docs")
- document_url = f'http://localhost:8088/tenant-server/v1/tenants/{tenant}/external-documents/check-health?botId={botid}' 
+ document_url = f'http://host.docker.internal:8088/tenant-server/v1/tenants/{tenant}/external-documents/check-health?botId={botid}'
  response = requests.get(document_url)
  response_text = response.text
  dict = json.loads(response_text)
@@ -134,7 +134,7 @@ def getDocKeys(tenant, botid):
         print("cluster", cluster)
         print("tenant", tenant)
         print("botid", botid)
-        response = json.loads(requests.get(f"http://localhost:8088/tenant-server/v1/tenants/{tenant}/external-documents/check-health?botId={botid}").text)
+        response = json.loads(requests.get(f"http://host.docker.internal:8088/tenant-server/v1/tenants/{tenant}/external-documents/check-health?botId={botid}").text)
     except:
         return False
     file_path = f"../documentKeys/Keys_clusteruat_tenant{tenant}_botid{botid}.csv"
@@ -143,6 +143,7 @@ def getDocKeys(tenant, botid):
         for item in response:
             csvwriter.writerow([item.get("documentKey")])
     return True
+
 
 
 print("starting portforwarding")
