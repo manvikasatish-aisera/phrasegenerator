@@ -9,10 +9,12 @@ import requests
 import sys
 import subprocess
 import time
+import os
 
-cluster = sys.argv[1]
-tenant = sys.argv[2]
-bot = sys.argv[3]
+cluster = os.environ('CLUSTER')
+tenant = os.environ('TENANT')
+bot = os.environ('BOT_ID')
+num_docs = int(os.environ('NUM_DOCS'))
 #date_time = sys.argv[4]
 
 now = datetime.now()
@@ -59,7 +61,7 @@ def run_kube_commands(env):
 
 
 def iterate_docs(cluster, tenant, bot):
-    numDocs = 3
+    # numDocs = 3
     
     if not os.path.isfile(f'../documentInfo/Info_cluster{cluster}_tenant{tenant}_botid{bot}.csv'):
         if not getDocKeys(tenant, bot):

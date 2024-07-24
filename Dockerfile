@@ -5,7 +5,7 @@ FROM python:3.11.3
 # Set the working directory
 WORKDIR /usr/src/app
 
-EXPOSE 3000
+EXPOSE 8088
 # Copy the rest of the code
 COPY . .
 
@@ -18,8 +18,8 @@ ENV BOT_ID 740
 ENV NUM_DOCS 1
 
 WORKDIR src
-ENTRYPOINT ["python3", "phrasegen.py"]
-CMD ["dev0", "10000", "295"]
+CMD ["python3", "phrasegen.py"]
+# CMD ["dev0", "10000", "295"]
 
 # CMD /usr/src/app/test.sh ; sleep infinity
 
