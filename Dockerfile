@@ -5,7 +5,7 @@ FROM python:3.11.3
 # Set the working directory
 WORKDIR /usr/src/app
 
-EXPOSE 8088
+EXPOSE 3000
 # Copy the rest of the code
 COPY . .
 
