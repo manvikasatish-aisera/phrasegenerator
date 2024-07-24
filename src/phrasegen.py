@@ -6,14 +6,13 @@ from fetchdata import *
 from S3export import *
 import openpyxl
 import requests
-import sys
 import subprocess
 import time
 import os
 
-cluster = os.environ('CLUSTER')
-tenant = os.environ('TENANT')
-bot = os.environ('BOT_ID')
+cluster = str(os.environ('CLUSTER'))
+tenant = str(os.environ('TENANT'))
+bot = str(os.environ('BOT_ID'))
 num_docs = int(os.environ('NUM_DOCS'))
 port_number = int(os.environ('PORT_NUM'))
 #date_time = sys.argv[4]
