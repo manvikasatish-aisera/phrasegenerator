@@ -10,11 +10,11 @@ import subprocess
 import time
 import os
 
-cluster = str(os.environ('CLUSTER'))
-tenant = str(os.environ('TENANT'))
-bot = str(os.environ('BOT_ID'))
-num_docs = int(os.environ('NUM_DOCS'))
-port_number = int(os.environ('PORT_NUM'))
+cluster = os.getenv('CLUSTER')
+tenant = os.getenv('TENANT')
+bot = os.getenv('BOT_ID')
+num_docs = int(os.getenv('NUM_DOCS'))
+port_number = int(os.getenv('PORT_NUM'))
 #date_time = sys.argv[4]
 
 now = datetime.now()
