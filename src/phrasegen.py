@@ -15,6 +15,7 @@ cluster = os.environ('CLUSTER')
 tenant = os.environ('TENANT')
 bot = os.environ('BOT_ID')
 num_docs = int(os.environ('NUM_DOCS'))
+port_number = int(os.environ('PORT_NUM'))
 #date_time = sys.argv[4]
 
 now = datetime.now()
@@ -82,7 +83,7 @@ def iterate_docs(cluster, tenant, bot):
             doc_key = int(row[0])
             source_url = row[1]
             title = row[2]
-            section_url = f'http://host.docker.internal:8088/tenant-server/v1/tenants/{tenant}/external-documents/retrieve-sections?documentKey={doc_key}&isCommitted=true'
+            section_url = f'http://host.docker.internal:{port_number}/tenant-server/v1/tenants/{tenant}/external-documents/retrieve-sections?documentKey={doc_key}&isCommitted=true'
             response = requests.get(section_url)
 
             if response.status_code == 200:
@@ -91,7 +92,7 @@ def iterate_docs(cluster, tenant, bot):
                 if source_url is None:
                     source_url = f'No URL. Document Key: {doc_key}'
 
-                utterances = retrieve_data(tenant, doc_key, title, source_url)
+                utterances = retrieve_data(tenant, doc_key, title, source_url, port_number)
                 
                 for i in range(len(utterances)):
                     start_row = sheet.max_row + 1
@@ -99,7 +100,7 @@ def iterate_docs(cluster, tenant, bot):
                         sheet.cell(row=start_row,column=col_index,value=item)
                         
                 row_count += 1
-            if row_count >= numDocs:
+            if row_count >= num_docs:
                 break
             
         sheet.cell(1,1,"Doc Title")
@@ -112,7 +113,7 @@ def iterate_docs(cluster, tenant, bot):
     
 def retrieve_docs(tenant, botid):
     print("retrieving the docs")
-    document_url = f'http://host.docker.internal:8088/tenant-server/v1/tenants/{tenant}/external-documents/check-health?botId={botid}' 
+    document_url = f'http://host.docker.internal:{port_number}/tenant-server/v1/tenants/{tenant}/external-documents/check-health?botId={botid}' 
     response = requests.get(document_url)
     response_text = response.text
     dict = json.loads(response_text)
@@ -136,7 +137,7 @@ def postprocess(list,csvfile):
 
 def getDocKeys(tenant,botid):
     try:
-        response = json.loads(requests.get(f"http://host.docker.internal:8088/tenant-server/v1/tenants/{tenant}/external-documents/check-health?botId={botid}").text)
+        response = json.loads(requests.get(f"http://host.docker.internal:{port_number}/tenant-server/v1/tenants/{tenant}/external-documents/check-health?botId={botid}").text)
     except:
         return False
     file_path = f"../documentInfo/Info_clusteruat_tenant{tenant}_botid{botid}.csv"
