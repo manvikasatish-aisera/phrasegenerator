@@ -62,7 +62,6 @@ def run_kube_commands(env):
 
 def iterate_docs(cluster, tenant, bot):
     # numDocs = 3
-    
     if not os.path.isfile(f'../documentInfo/Info_cluster{cluster}_tenant{tenant}_botid{bot}.csv'):
         if not getDocKeys(tenant, bot):
             print("incorrect combo of cluster/tenant/bot")
@@ -139,15 +138,13 @@ def getDocKeys(tenant,botid):
         response = json.loads(requests.get(f"http://host.docker.internal:{port_number}/tenant-server/v1/tenants/{tenant}/external-documents/check-health?botId={botid}").text)
     except:
         return False
-    file_path = f"../documentInfo/Info_clusteruat_tenant{tenant}_botid{botid}.csv"
+    file_path = f"../documentInfo/Info_cluster{cluster}_tenant{tenant}_botid{botid}.csv"
     with open(file_path, 'w', newline='') as csvfile:
         csvwriter = csv.writer(csvfile)
         for item in response:
             csvwriter.writerow([item.get("documentKey") , item.get("source") , item.get("title")])
     return True
 
-
-print("starting portforwarding")
 # run_kube_commands(cluster)
 print("...")
 iterate_docs(cluster, tenant, bot)
