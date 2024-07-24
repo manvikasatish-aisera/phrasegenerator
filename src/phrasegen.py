@@ -20,45 +20,11 @@ port_number = int(os.getenv('PORT_NUM'))
 now = datetime.now()
 date_time = now.strftime("%Y_%m_%d_%H_%M")
 
+print("--------------------")
 print("Environment:", cluster)
 print("Tenant:", tenant)
 print("Source bot_id:", bot)
 print("Date: ", date_time)
-
-def run_kube_commands(env):
-    print("running kube commands")
-    port_forward_db_command = "kubectl port-forward service/tenant-server 8088:8088 &"
-    context_command = None
-
-    if env in ["dev0", "dev2", "dev4", "dev6", "uat"]:
-        context_command = "kubectl config use-context aws-007"
-        namespace_command = "kubens " + env
-
-    elif env in ["staging0", "poc0"]:
-        context_command = "kubectl config use-context aws-hood-stg"
-        namespace_command = "kubens " + env
-
-    elif env == "prod0" :
-        context_command = "kubectl config use-context aws-hood-prod"
-        namespace_command = "kubens " + env
-
-    elif env == "prod1" :
-        context_command = "kubectl config use-context aws-hood-prod1"
-        namespace_command = "kubens " + env
-
-    elif env == "azure-prod" :
-        context_command = "kubectl config use-context aisera-katmai-prod-aks"
-        namespace_command = "kubens prod"
-
-    # Kill any existing kubectl process
-    subprocess.run("pkill kubectl", shell=True)
-
-    subprocess.run(context_command, shell=True, check=True)
-    subprocess.run(namespace_command, shell=True, check=True)
-    subprocess.run(port_forward_db_command, shell=True, check=True)
-    print("done portforwarding")
-    time.sleep(5)
-
 
 def iterate_docs(cluster, tenant, bot):
     # numDocs = 3
