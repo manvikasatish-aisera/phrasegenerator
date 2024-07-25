@@ -1,7 +1,7 @@
 from openai import AzureOpenAI
 import tiktoken
 from numpy import random
-from vaultsecrets import get_openai_key_from_vault
+from vaultsecrets import *
 from dotenv import load_dotenv
 
 def count_tokens(text):
