@@ -25,11 +25,10 @@ print("Date: ", date_time)
 def iterate_docs(cluster, tenant, bot):
     if not os.path.isfile(f'../documentInfo/Info_cluster{cluster}_tenant{tenant}_botid{bot}.csv'):
         if not getDocKeys(tenant, bot):
-            print("incorrect combo of cluster/tenant/bot")
+            print("Incorrect combination of cluster/tenant/bot... Try again.")
             raise SystemExit
         print("First time accessing this bot, gathering all documents...")
 
-    docs = retrieve_docs(tenant, bot)
     print("iterating through the docs")
     with open(f'../documentInfo/Info_cluster{cluster}_tenant{tenant}_botid{bot}.csv') as file_obj:
         row_count = 0 
@@ -69,47 +68,29 @@ def iterate_docs(cluster, tenant, bot):
         
         workbook.save(f"../results/{cluster}_tenant{tenant}_botid{bot}_excel_{date_time}.xlsx")        
         uploadFile_to_S3(cluster, tenant, bot)
-    
-def retrieve_docs(tenant, botid):
-    print("retrieving the docs")
-    document_url = f'http://localhost:8088/tenant-server/v1/tenants/{tenant}/external-documents/check-health?botId={botid}' 
-    response = requests.get(document_url)
-    response_text = response.text
-    dict = json.loads(response_text)
-
-    return dict
-
-def get_doc_title_and_source(docs, doc_key):
-    doc_title = ''
-    for doc in docs:
-        if doc['documentKey'] == doc_key:
-            doc_title = doc['title']
-            source_url = doc['source']
-            break
-    return doc_title, source_url
-
-
-def postprocess(list,csvfile):
-    with open(csvfile, 'a', newline='') as file:
-        writetocsv = csv.writer(file)
-        writetocsv.writerow(list)
 
 def getDocKeys(tenant, botid):
     try:
         url = f"http://localhost:8088/tenant-server/v1/tenants/{tenant}/external-documents/check-health?botId={botid}"
         print(url)
         response = json.loads(requests.get(url).text)
-        print("got keys.")
+        print("Retrieved keys!!!")
     except:
-        print("failed to get keys.")
+        print("Failed to retrieve keys... :(")
         return False
+    
     file_path = f"../documentInfo/Info_cluster{cluster}_tenant{tenant}_botid{botid}.csv"
+    directory = os.path.dirname(file_path)
+
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+
     with open(file_path, 'w', newline='') as csvfile:
         csvwriter = csv.writer(csvfile)
         for item in response:
-            csvwriter.writerow([item.get("documentKey") , item.get("source") , item.get("title")])
+            csvwriter.writerow([item.get("documentKey"), item.get("source"), item.get("title")])
+
     return True
 
-# run_kube_commands(cluster)
 print("...")
 iterate_docs(cluster, tenant, bot)
