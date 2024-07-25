@@ -29,7 +29,7 @@ def get_secret_key_v1(vault_address, github_token, secret_path, key):
     apikey = secret_data['data']['data'][key]
     return apikey
   
-def get_channel_token_from_vault(path, key):
+def get_openai_token_from_vault(path, key):
     vault_address = os.getenv('VAULT_ADDR')
     github_token = os.getenv('GITHUB_TOKEN')
     secret_path = path
@@ -39,6 +39,3 @@ def get_channel_token_from_vault(path, key):
         raise EnvironmentError("GITHUB_TOKEN environment variable is not set")
     openaikey = get_secret_key_v1(vault_address, github_token, secret_path, key)  
     return openaikey
-
-apikeyPath = "/qa/data/environment/common/openai"
-openaikey = get_channel_token_from_vault(apikeyPath, "OPENAI_API_KEY")
