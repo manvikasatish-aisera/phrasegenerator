@@ -35,7 +35,7 @@ def send_prompt_with_document(section, title):
   load_dotenv()
   # api_version = os.getenv('OPENAI_API_VERSION')
   apikeyPath = "/qa/data/environment/common/openai"
-  api_key = get_openai_key_from_vault(apikeyPath, "OPENAI_API_KEY")
+  api_key = get_openai_token_from_vault(apikeyPath, "OPENAI_API_KEY")
   print("OPEN_AI API KEY", api_key)
   # azure_endpoint = os.getenv('OPENAI_AZURE_ENDPOINT')
   
