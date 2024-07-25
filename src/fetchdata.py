@@ -4,8 +4,7 @@ from openaigen import *
 
 
 def no_section_document():
-    print("Try another api, document doesn't contain sections")
-    print("or document does not exist.")
+    print("Document does not contain sections...")
 
 def retrieve_data(tenant, doc_key, title, source_url):
     utterances = []
