@@ -47,19 +47,14 @@ def send_prompt_with_document(section, title):
         api_version = api_version,
         azure_endpoint = azure_endpoint)
   
-  try:
-      completion = client.chat.completions.create(
-      model = "gpt4",
-      temperature = round(random.uniform(0,1), 1),
-      messages=[
-        {"role": "system", "content": '[Document Title] \n"' + title + '"\n\n[Document Content]\n<<' + section + ">>\n###\n"},
-        {"role": "user", "content": '[Prompt]\n"' + prompt + '"'}
-      ]
-      )
-      msg = completion.choices[0].message.content
-  except openai.error.OpenAIError as e:
-    print(f"Error occurred: {e}")
-    raise
+  completion = client.chat.completions.create(
+  model = "gpt4",
+  temperature = round(random.uniform(0,1), 1),
+  messages=[
+    {"role": "system", "content": '[Document Title] \n"' + title + '"\n\n[Document Content]\n<<' + section + ">>\n###\n"},
+    {"role": "user", "content": '[Prompt]\n"' + prompt + '"'}
+  ]
+  )
+  msg = completion.choices[0].message.content
 
-  
   return msg
