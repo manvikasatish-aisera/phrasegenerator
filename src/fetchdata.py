@@ -7,9 +7,9 @@ def no_section_document():
     print("Try another api, document doesn't contain sections")
     print("or document does not exist.")
 
-def retrieve_data(tenant, doc_key, title, source_url, port_number, host_ip):
+def retrieve_data(tenant, doc_key, title, source_url):
     utterances = []
-    sections_url = f'http://{host_ip}:{port_number}/tenant-server/v1/tenants/{tenant}/external-documents/retrieve-sections?documentKey={doc_key}&isCommitted=true'
+    sections_url = f'http://localhost:8088/tenant-server/v1/tenants/{tenant}/external-documents/retrieve-sections?documentKey={doc_key}&isCommitted=true'
     resp = requests.get(sections_url)
 
     if resp.status_code != 200:
