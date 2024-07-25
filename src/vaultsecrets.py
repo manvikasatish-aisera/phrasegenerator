@@ -32,7 +32,7 @@ def get_secret_key_v1(vault_address, github_token, secret_path, key):
 def get_secret_version_v1(vault_address, github_token, secret_path, key):
     client_token = authenticate_with_github(vault_address, github_token)
     secret_data = read_secret_from_vault_v1(vault_address, client_token, secret_path)
-    apiversion = secret_data['metadata'][key]
+    apiversion = secret_data['data']['metadata'][key]
     return apiversion
   
 def get_openai_token_from_vault(path, key):
