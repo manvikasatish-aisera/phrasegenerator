@@ -28,6 +28,12 @@ def get_secret_key_v1(vault_address, github_token, secret_path, key):
     secret_data = read_secret_from_vault_v1(vault_address, client_token, secret_path)
     apikey = secret_data['data']['data'][key]
     return apikey
+
+def get_secret_version_v1(vault_address, github_token, secret_path, key):
+    client_token = authenticate_with_github(vault_address, github_token)
+    secret_data = read_secret_from_vault_v1(vault_address, client_token, secret_path)
+    apiversion = secret_data['metadata'][key]
+    return apiversion
   
 def get_openai_token_from_vault(path, key):
     vault_address = os.getenv('VAULT_ADDR')
@@ -39,3 +45,14 @@ def get_openai_token_from_vault(path, key):
         raise EnvironmentError("GITHUB_TOKEN environment variable is not set")
     openaikey = get_secret_key_v1(vault_address, github_token, secret_path, key)  
     return openaikey
+
+def get_openai_version_from_vault(path, key):
+    vault_address = os.getenv('VAULT_ADDR')
+    github_token = os.getenv('GITHUB_TOKEN')
+    secret_path = path
+    if not vault_address:
+        raise EnvironmentError("VAULT_ADDR environment variable is not set")
+    if not github_token:
+        raise EnvironmentError("GITHUB_TOKEN environment variable is not set")
+    openaiversion = get_secret_version_v1(vault_address, github_token, secret_path, key)  
+    return openaiversion
