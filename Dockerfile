@@ -18,7 +18,7 @@ ENV BOT_ID 740
 ENV NUM_DOCS 1
 ENV OPENAI_AZURE_ENDPOINT endpointvalue
 ENV OPENAI_API_VERSION apiversion
-ENV OPENAI_API_KEY apikey
+ENV OPENAI_API_KEY dummy
 ENV GITHUB_TOKEN githubtoken
 ENV HOST_IP localhost
 ENV aws_access_key_id awskey
