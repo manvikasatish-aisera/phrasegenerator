@@ -2,7 +2,6 @@ import openai
 from openai import AzureOpenAI
 import tiktoken
 from numpy import random
-from vaultsecrets import *
 from dotenv import load_dotenv
 
 def count_tokens(text):
@@ -34,8 +33,6 @@ def check_content_length(filetext, prompt, title):
        
 def send_prompt_with_document(section, title):
   load_dotenv()
-  apikeyPath = "/qa/data/environment/common/openai"
-
   api_key = os.getenv('OPENAI_API_KEY')
   azure_endpoint = os.getenv('OPENAI_AZURE_ENDPOINT')
   api_version= os.getenv('OPENAI_API_VERSION')

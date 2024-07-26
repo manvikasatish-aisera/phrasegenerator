@@ -39,6 +39,3 @@ def get_openai_token_from_vault(path, key):
         raise EnvironmentError("GITHUB_TOKEN environment variable is not set")
     openaikey = get_secret_key_v1(vault_address, github_token, secret_path, key)  
     return openaikey
-
-openai_key = get_openai_token_from_vault("/qa/data/environment/common/openai", "OPENAI_API_KEY")
-print("OPENAI_API_KEY", openai_key)
