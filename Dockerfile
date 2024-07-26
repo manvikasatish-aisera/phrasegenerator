@@ -16,6 +16,7 @@ ENV CLUSTER uat
 ENV TENANT 10000
 ENV BOT_ID 740
 ENV NUM_DOCS 1
+ENV OPENAI_AZURE_ENDPOINT endpointvalue
 
 WORKDIR src
 CMD ["python3", "phrasegen.py"]
