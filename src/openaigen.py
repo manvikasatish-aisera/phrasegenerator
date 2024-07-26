@@ -39,7 +39,6 @@ def send_prompt_with_document(section, title):
   api_key = os.getenv('OPENAI_API_KEY')
   # api_key = get_openai_token_from_vault(apikeyPath, "OPENAI_API_KEY")
   # api_version = get_openai_version_from_vault(apikeyPath, "version")
-  api_version = 2  
   azure_endpoint = os.getenv('OPENAI_AZURE_ENDPOINT')
   
   
@@ -47,7 +46,6 @@ def send_prompt_with_document(section, title):
 
   client = AzureOpenAI(
         api_key = api_key,
-        api_version = api_version,
         azure_endpoint = azure_endpoint)
   
   completion = client.chat.completions.create(
