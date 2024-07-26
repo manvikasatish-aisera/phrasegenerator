@@ -6,9 +6,9 @@ from openaigen import *
 def no_section_document():
     print("Document does not contain sections...")
 
-def retrieve_data(tenant, doc_key, title, source_url):
+def retrieve_data(tenant, doc_key, title, source_url, host_ip):
     utterances = []
-    sections_url = f'http://localhost:8088/tenant-server/v1/tenants/{tenant}/external-documents/retrieve-sections?documentKey={doc_key}&isCommitted=true'
+    sections_url = f'http://{host_ip}:8088/tenant-server/v1/tenants/{tenant}/external-documents/retrieve-sections?documentKey={doc_key}&isCommitted=true'
     resp = requests.get(sections_url)
 
     if resp.status_code != 200:

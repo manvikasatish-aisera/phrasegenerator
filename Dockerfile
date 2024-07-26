@@ -17,8 +17,12 @@ ENV TENANT 10000
 ENV BOT_ID 740
 ENV NUM_DOCS 1
 ENV OPENAI_AZURE_ENDPOINT endpointvalue
-ENV OPENAI_API_KEY openaikeyvalue
-ENV OPENAI_API_VERSION 2024-05-23
+ENV OPENAI_API_VERSION apiversion
+ENV GITHUB_TOKEN githubtoken
+ENV HOST_IP localhost
+ENV aws_access_key_id awskey
+ENV aws_secret_access_key awssecret
+ENV region_name region
 
 WORKDIR src
 CMD ["python3", "phrasegen.py"]

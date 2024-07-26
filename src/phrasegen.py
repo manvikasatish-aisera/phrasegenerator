@@ -12,6 +12,7 @@ cluster = os.getenv('CLUSTER')
 tenant = os.getenv('TENANT')
 bot = os.getenv('BOT_ID')
 num_docs = int(os.getenv('NUM_DOCS'))
+host_ip = os.getenv('HOST_IP')
 
 now = datetime.now()
 date_time = now.strftime("%Y_%m_%d_%H_%M")
@@ -41,7 +42,7 @@ def iterate_docs(cluster, tenant, bot):
             doc_key = int(row[0])
             source_url = row[1]
             title = row[2]
-            section_url = f'http://localhost:8088/tenant-server/v1/tenants/{tenant}/external-documents/retrieve-sections?documentKey={doc_key}&isCommitted=true'
+            section_url = f'http://{host_ip}:8088/tenant-server/v1/tenants/{tenant}/external-documents/retrieve-sections?documentKey={doc_key}&isCommitted=true'
             response = requests.get(section_url)
 
             if response.status_code == 200:
@@ -50,7 +51,7 @@ def iterate_docs(cluster, tenant, bot):
                 if source_url is None:
                     source_url = f'No URL. Document Key: {doc_key}'
 
-                utterances = retrieve_data(tenant, doc_key, title, source_url)
+                utterances = retrieve_data(tenant, doc_key, title, source_url, host_ip)
                 
                 for i in range(len(utterances)):
                     start_row = sheet.max_row + 1
@@ -71,7 +72,7 @@ def iterate_docs(cluster, tenant, bot):
 
 def getDocKeys(tenant, botid):
     try:
-        url = f"http://localhost:8088/tenant-server/v1/tenants/{tenant}/external-documents/check-health?botId={botid}"
+        url = f"http://{host_ip}:8088/tenant-server/v1/tenants/{tenant}/external-documents/check-health?botId={botid}"
         print(url)
         response = json.loads(requests.get(url).text)
         print("Retrieved keys!!!")
