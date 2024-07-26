@@ -28,6 +28,7 @@ def iterate_docs(cluster, tenant, bot):
         if not getDocKeys(tenant, bot):
             print("Incorrect combination of cluster/tenant/bot... Try again.")
             raise SystemExit
+        # reconsider printing this
         print("First time accessing this bot, gathering all documents...")
 
     print("iterating through the docs")
@@ -73,7 +74,6 @@ def iterate_docs(cluster, tenant, bot):
 def getDocKeys(tenant, botid):
     try:
         url = f"http://{host_ip}:8088/tenant-server/v1/tenants/{tenant}/external-documents/check-health?botId={botid}"
-        print(url)
         response = json.loads(requests.get(url).text)
         print("Retrieved keys!!!")
     except:

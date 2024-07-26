@@ -31,4 +31,5 @@ def uploadFile_to_S3(cluster, tenant, bot ):
     s3.upload_file(latest_file, bucket_name, s3_folderPath)
     os.chdir(os.getcwd()+"/src")
     
-    print(f'File -{latest_file}- uploaded to S3 bucket: {bucket_name}')
+    print(f'File -{latest_file}- uploaded to S3 bucket: {bucket_name}.')
+    print(f'S3 Path: {bucket_name}/{s3_folderPath}')
