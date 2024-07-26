@@ -1,8 +1,8 @@
-import openai
 from openai import AzureOpenAI
 import tiktoken
 from numpy import random
 from dotenv import load_dotenv
+import os
 
 def count_tokens(text):
     encoding = tiktoken.get_encoding("cl100k_base")
