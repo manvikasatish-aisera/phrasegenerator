@@ -18,6 +18,7 @@ ENV BOT_ID 740
 ENV NUM_DOCS 1
 ENV OPENAI_AZURE_ENDPOINT endpointvalue
 ENV OPENAI_API_KEY openaikeyvalue
+ENV OPENAI_API_VERSION 2024-05-23
 
 WORKDIR src
 CMD ["python3", "phrasegen.py"]
