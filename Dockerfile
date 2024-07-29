@@ -3,7 +3,7 @@
 FROM python:3.11.3
 
 # Set the working directory
-WORKDIR /usr/app/src
+WORKDIR /usr/src/app
 
 # EXPOSE 8088
 # Copy the rest of the code
@@ -24,6 +24,8 @@ ENV HOST_IP localhost
 ENV aws_access_key_id awskey
 ENV aws_secret_access_key awssecret
 ENV region_name region
+
+RUN mkdir -p /logs
 
 WORKDIR src
 CMD ["python3", "phrasegen.py"]
