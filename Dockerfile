@@ -26,7 +26,8 @@ ENV aws_secret_access_key awssecret
 ENV region_name region
 
 RUN mkdir -p /logs
-
+RUN pwd
+RUN ls /
 WORKDIR src
 CMD ["python3", "phrasegen.py"]
 
