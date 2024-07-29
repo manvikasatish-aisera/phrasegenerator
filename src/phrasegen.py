@@ -8,7 +8,7 @@ import openpyxl
 import requests
 import os
 
-cluster = os.getenv('CLUSTER')
+cluster = os.getenv('CLUSTER').lower()
 tenant = os.getenv('TENANT')
 bot = os.getenv('BOT_ID')
 num_docs = int(os.getenv('NUM_DOCS'))
@@ -24,7 +24,7 @@ print("Source bot_id:", bot)
 print("Date: ", date_time)
 
 def iterate_docs(cluster, tenant, bot):
-    if not os.path.isfile(f'../documentInfo/Info_cluster{cluster}_tenant{tenant}_botid{bot}.csv'):
+    if not os.path.isfile(f'/logs/Info_cluster{cluster}_tenant{tenant}_botid{bot}.csv'):
         if not getDocKeys(tenant, bot):
             print("Incorrect combination of cluster/tenant/bot... Try again.")
             raise SystemExit
@@ -32,7 +32,7 @@ def iterate_docs(cluster, tenant, bot):
         print("First time accessing this bot, gathering all documents...")
 
     print("iterating through the docs")
-    with open(f'../documentInfo/Info_cluster{cluster}_tenant{tenant}_botid{bot}.csv') as file_obj:
+    with open(f'/logs/Info_cluster{cluster}_tenant{tenant}_botid{bot}.csv') as file_obj:
         row_count = 0 
         reader_obj = csv.reader(file_obj) 
         
@@ -80,7 +80,7 @@ def getDocKeys(tenant, botid):
         print("Failed to retrieve keys... :(")
         return False
     
-    file_path = f"../documentInfo/Info_cluster{cluster}_tenant{tenant}_botid{botid}.csv"
+    file_path = f"/logs/Info_cluster{cluster}_tenant{tenant}_botid{botid}.csv"
     directory = os.path.dirname(file_path)
 
     if not os.path.exists(directory):
