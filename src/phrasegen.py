@@ -14,8 +14,8 @@ bot = os.getenv('BOT_ID')
 num_docs = int(os.getenv('NUM_DOCS'))
 host_ip = os.getenv('HOST_IP')
 
-now = datetime.now()
-date_time = now.strftime("%Y_%m_%d_%H_%M")
+# now = datetime.now()
+date_time = os.getenv('TODAY')
 
 print("--------------------")
 print("Environment:", cluster)
