@@ -7,6 +7,7 @@ from S3export import *
 import openpyxl
 import requests
 import os
+import time
 
 cluster = os.getenv('CLUSTER').lower()
 tenant = os.getenv('TENANT')
@@ -32,6 +33,8 @@ def iterate_docs(cluster, tenant, bot):
         print("First time accessing this bot, gathering all documents...")
 
     print("iterating through the docs")
+
+    time.sleep(100)
     with open(f'/logs/Info_cluster{cluster}_tenant{tenant}_botid{bot}.csv') as file_obj:
         row_count = 0 
         reader_obj = csv.reader(file_obj) 
