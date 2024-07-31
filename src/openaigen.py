@@ -29,7 +29,8 @@ def check_content_length(filetext, prompt, title):
     else:
         content = [filetext]
     return content
-       
+
+# "payload" function
 def send_prompt_with_document(section, title):
   apikeyPath= "/qa/data/environment/common/openai"
 
@@ -43,6 +44,7 @@ def send_prompt_with_document(section, title):
         api_version=api_version,
         azure_endpoint=azure_endpoint)
   
+  # Sends the prompt and document to gpt-4, asking for a random 'temperature' between 0 and 1 to create some diversity in responses.
   completion = client.chat.completions.create(
   model = "gpt4",
   temperature = round(random.uniform(0,1), 1),
