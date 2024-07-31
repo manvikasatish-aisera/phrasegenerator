@@ -36,6 +36,11 @@ def uploadFile_to_S3(cluster, tenant, bot):
     # Run the command
     result = subprocess.run(command, capture_output=True, text=True)
 
+    print("Command:", " ".join(command))
+    print("Return code:", result.returncode)
+    print("STDOUT:", result.stdout)
+    print("STDERR:", result.stderr)
+
     if result.returncode == 0:
         print(f'File -{latest_file}- uploaded to S3 bucket: {bucket_name}.')
         print(f'S3 Path: s3://{bucket_name}/{s3_folderPath}')
