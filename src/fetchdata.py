@@ -7,21 +7,7 @@ def no_section_document():
     print("Document does not contain sections...")
 
 def retrieve_data(tenant, doc_key, title, source_url, host_ip):
-    """
-    Retrieve data from document sections for a given tenant and document key.
-
-    Args:
-        tenant (str): The tenant identifier.
-        doc_key (int): The document key.
-        title (str): The document title.
-        source_url (str): The source URL of the document.
-        host_ip (str): The host IP address.
-
-    Returns:
-        list: A list of utterances, where each utterance is a list containing 
-              the document title, section title, source URL, and the processed content.
-    """
-    
+    # List to store info that is being written to file
     utterances = []
     sections_url = f'http://{host_ip}:8088/tenant-server/v1/tenants/{tenant}/external-documents/retrieve-sections?documentKey={doc_key}&isCommitted=true'
     
