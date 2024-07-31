@@ -5,3 +5,4 @@ openpyxl
 numpy
 requests
 python-dotenv
+awscli
