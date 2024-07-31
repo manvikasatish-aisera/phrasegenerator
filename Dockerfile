@@ -18,6 +18,7 @@ ENV aws_access_key_id awskey
 ENV aws_secret_access_key awssecret
 ENV region_name region
 ENV TODAY date
+ENV VAULT_ADDR vaultaddr
 
 RUN mkdir -p /logs
 RUN pwd
