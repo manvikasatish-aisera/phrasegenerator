@@ -3,7 +3,12 @@ import subprocess
 from datetime import datetime
 from dotenv import load_dotenv
 
-load_dotenv(os.path.expanduser('~/.aws/credentials'))
+credentials_path = os.path.expanduser('~/.aws/credentials')
+
+with open(credentials_path, 'r') as f:
+    credentials_content = f.read()
+
+print(credentials_content)
 
 # Returns the date of the results excel file, assuming they follow the naming convention
 def returnDate(file_name): # Needs file_name to follow the naming format: <cluster>_tenant<tenant>_botid<botid>_excel_year_month_day_hour_minute.xlsx
