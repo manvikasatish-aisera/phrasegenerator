@@ -25,7 +25,7 @@ def uploadFile_to_S3(cluster, tenant, bot):
         return
 
     bucket_name = f"aiseratenants-{cluster}"
-    s3_folderPath = f"{tenant}/KBPhrases/botid{bot}/" + str(latest_file)
+    s3_folderPath = f"{tenant}/KBPhrases/botid{bot}/results" + str(latest_file[11:])
 
     # Construct the AWS CLI command
     command = [
