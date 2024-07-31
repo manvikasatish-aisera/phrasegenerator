@@ -20,7 +20,6 @@ def read_secret_from_vault_v1(vault_address, client_token, secret_path):
     response = requests.get(secret_url, headers=headers)
     response.raise_for_status()
     answer = response.json()
-    print(answer)
     return answer
 
 def get_secret_key_v1(vault_address, github_token, secret_path, key):

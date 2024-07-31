@@ -35,11 +35,8 @@ def send_prompt_with_document(section, title):
   apikeyPath= "/qa/data/environment/common/openai"
 
   api_key = get_openai_details(apikeyPath, "OPENAI_API_KEY_V2")
-  print("api key", api_key)
   api_version = get_openai_details(apikeyPath, "OPENAI_API_VERSION_V2")
-  print("api version", api_version)
   azure_endpoint = get_openai_details(apikeyPath, "OPENAI_API_ENDPOINT_V2")
-  print("api endpoint", azure_endpoint)
     
   prompt = "Assume the role of a user of a generative AI product. Given the contents of a document and its title, generate a single question, phrase, or statement that is coherent english. The question, statement, or phrase should be short in length, and cover either main ideas, specific details, or implications, and can use slang, short forms of words, etc. Do not include the document title or role of the user in your response. Do not include any escape characters in your response. Each phrase must refer to the main entity in the title or the content text, and be unique and cover something different about the document everytime you generate a new one. Ignore images and HTML tags, and ensure you don't pull phrases straight from the document."
   client = AzureOpenAI(
