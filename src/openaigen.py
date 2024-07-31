@@ -1,8 +1,7 @@
 from openai import AzureOpenAI
 import tiktoken
 from numpy import random
-from dotenv import load_dotenv
-import os
+from vaultsecrets import *
 
 def count_tokens(text):
     encoding = tiktoken.get_encoding("cl100k_base")
@@ -32,11 +31,12 @@ def check_content_length(filetext, prompt, title):
     return content
        
 def send_prompt_with_document(section, title):
-  load_dotenv()
-  api_key = os.getenv('OPENAI_API_KEY')
-  azure_endpoint = os.getenv('OPENAI_AZURE_ENDPOINT')
-  api_version= os.getenv('OPENAI_API_VERSION')
-  
+  apikeyPath= "/qa/data/environment/common/openai"
+
+  api_key = get_openai_details(apikeyPath, "OPENAI_API_KEY_V2")
+  api_version = get_openai_details(apikeyPath, "OPENAI_API_VERSION_V2")
+  azure_endpoint = get_openai_details(apikeyPath, "OPENAI_API_ENDPOINT_V2")
+    
   prompt = "Assume the role of a user of a generative AI product. Given the contents of a document and its title, generate a single question, phrase, or statement that is coherent english. The question, statement, or phrase should be short in length, and cover either main ideas, specific details, or implications, and can use slang, short forms of words, etc. Do not include the document title or role of the user in your response. Do not include any escape characters in your response. Each phrase must refer to the main entity in the title or the content text, and be unique and cover something different about the document everytime you generate a new one. Ignore images and HTML tags, and ensure you don't pull phrases straight from the document."
   client = AzureOpenAI(
         api_key = api_key,
