@@ -3,6 +3,8 @@ import subprocess
 from datetime import datetime
 from dotenv import load_dotenv
 
+load_dotenv(os.path.expanduser('~/.aws/credentials'))
+
 # Returns the date of the results excel file, assuming they follow the naming convention
 def returnDate(file_name): # Needs file_name to follow the naming format: <cluster>_tenant<tenant>_botid<botid>_excel_year_month_day_hour_minute.xlsx
     startIndex = file_name.rfind("excel") + 6
@@ -25,7 +27,7 @@ def uploadFile_to_S3(cluster, tenant, bot):
         return
 
     bucket_name = f"aiseratenants-{cluster}"
-    s3_folderPath = f"{tenant}/KBPhrases/botid{bot}/results" + str(latest_file[11:])
+    s3_folderPath = f"{tenant}/KBPhrases/botid{bot}/results/" + str(latest_file[11:])
 
     # Construct the AWS CLI command
     command = [

@@ -14,9 +14,6 @@ ENV TENANT 10000
 ENV BOT_ID 740
 ENV NUM_DOCS 1
 ENV GITHUB_TOKEN githubtoken
-ENV aws_access_key_id awskey
-ENV aws_secret_access_key awssecret
-ENV region_name region
 ENV TODAY date
 ENV VAULT_ADDR vaultaddr
 
