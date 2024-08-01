@@ -27,6 +27,7 @@ def returnDate(file_name): # Needs file_name to follow the naming format: <clust
 
 # Uploads the latest excel file into the AWS S3 bucket.
 def uploadFile_to_S3(cluster, tenant, bot ):
+    load_aws_credentials_from_above()
     # Finds latest file based on date.
     latest_file = None
     for filename in os.listdir("../results"):
