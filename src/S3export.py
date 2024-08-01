@@ -3,7 +3,7 @@ import boto3
 from datetime import datetime
 from configparser import ConfigParser
 
-def load_aws_credentials_from_above(profile='default'):
+def load_aws_credentials():
     # Determine the path to the credentials file located one directory above
     credentials_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), '.aws', 'credentials')
 
@@ -11,13 +11,8 @@ def load_aws_credentials_from_above(profile='default'):
     config = ConfigParser()
     config.read(credentials_path)
 
-    if profile in config:
-        # Set environment variables
-        os.environ['AWS_ACCESS_KEY_ID'] = config[profile]['aws_access_key_id']
-        os.environ['AWS_SECRET_ACCESS_KEY'] = config[profile]['aws_secret_access_key']
-        print(f"Loaded credentials for profile: {profile}")
-    else:
-        print(f"Profile {profile} not found in {credentials_path}")
+    os.environ['AWS_ACCESS_KEY_ID'] = config['aws_access_key_id']
+    os.environ['AWS_SECRET_ACCESS_KEY'] = config['aws_secret_access_key']
 
 # Returns the date of the results excel file, assuming they follow the naming convention
 def returnDate(file_name): # Needs file_name to follow the naming format: <cluster>_tenant<tenant>_botid<botid>_excel_year_month_day_hour_minute.xlsx
@@ -27,7 +22,7 @@ def returnDate(file_name): # Needs file_name to follow the naming format: <clust
 
 # Uploads the latest excel file into the AWS S3 bucket.
 def uploadFile_to_S3(cluster, tenant, bot ):
-    load_aws_credentials_from_above()
+    load_aws_credentials()
     # Finds latest file based on date.
     latest_file = None
     for filename in os.listdir("../results"):
