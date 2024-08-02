@@ -12,16 +12,10 @@ def load_aws_credentials(profile='default'):
     config = ConfigParser()
     config.read(credentials_path)
 
-    print("got here")
-
     if profile in config:
         # Retrieve the values
         aws_access_key_id = config[profile]['aws_access_key_id']
         aws_secret_access_key = config[profile]['aws_secret_access_key']
-        print(f"Loaded credentials for profile: {profile}")
-        print(f"aws_access_key_id: {aws_access_key_id}")
-        print(f"aws_secret_access_key: {aws_secret_access_key}")
-
         # Set environment variables
         os.environ['AWS_ACCESS_KEY_ID'] = aws_access_key_id
         os.environ['AWS_SECRET_ACCESS_KEY'] = aws_secret_access_key
