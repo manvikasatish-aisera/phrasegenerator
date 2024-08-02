@@ -3,16 +3,28 @@ import boto3
 from datetime import datetime
 from configparser import ConfigParser
 
-def load_aws_credentials():
+def load_aws_credentials(profile='default'):
     # Determine the path to the credentials file located one directory above
-    credentials_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), '.aws', 'credentials')
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    credentials_path = os.path.join(os.path.dirname(script_dir), '.aws', 'credentials')
 
     # Read the credentials file
     config = ConfigParser()
     config.read(credentials_path)
 
-    os.environ['AWS_ACCESS_KEY_ID'] = config['aws_access_key_id']
-    os.environ['AWS_SECRET_ACCESS_KEY'] = config['aws_secret_access_key']
+    if profile in config:
+        # Retrieve the values
+        aws_access_key_id = config[profile]['aws_access_key_id']
+        aws_secret_access_key = config[profile]['aws_secret_access_key']
+        print(f"Loaded credentials for profile: {profile}")
+        print(f"aws_access_key_id: {aws_access_key_id}")
+        print(f"aws_secret_access_key: {aws_secret_access_key}")
+
+        # Set environment variables
+        os.environ['AWS_ACCESS_KEY_ID'] = aws_access_key_id
+        os.environ['AWS_SECRET_ACCESS_KEY'] = aws_secret_access_key
+    else:
+        print(f"Profile {profile} not found in {credentials_path}")
 
 # Returns the date of the results excel file, assuming they follow the naming convention
 def returnDate(file_name): # Needs file_name to follow the naming format: <cluster>_tenant<tenant>_botid<botid>_excel_year_month_day_hour_minute.xlsx
