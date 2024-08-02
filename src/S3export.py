@@ -34,7 +34,7 @@ def returnDate(file_name): # Needs file_name to follow the naming format: <clust
 
 # Uploads the latest excel file into the AWS S3 bucket.
 def uploadFile_to_S3(cluster, tenant, bot ):
-    load_aws_credentials()
+    # load_aws_credentials()
     # Finds latest file based on date.
     latest_file = None
     for filename in os.listdir("../results"):
@@ -49,8 +49,8 @@ def uploadFile_to_S3(cluster, tenant, bot ):
 
     # Loads all the creds needed to access AWS S3.
     session = boto3.Session(
-        aws_access_key_id = os.getenv("AWS_ACCESS_KEY_ID"),
-        aws_secret_access_key = os.getenv("AWS_SECRET_ACCESS_KEY"),
+        aws_access_key_id = os.getenv("aws_access_key_id"),
+        aws_secret_access_key = os.getenv("aws_secret_access_key"),
         region_name = os.getenv("AWS_DEFAULT_REGION")
     )
     s3 = session.client("s3")

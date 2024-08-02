@@ -16,6 +16,8 @@ ENV NUM_DOCS 1
 ENV GITHUB_TOKEN githubtoken
 ENV TODAY date
 ENV VAULT_ADDR vaultaddr
+ENV aws_access_key_id tempid
+ENV aws_secret_access_key tempkey
 
 RUN mkdir -p /logs
 RUN pwd
