@@ -16,12 +16,13 @@ ENV NUM_DOCS 1
 ENV GITHUB_TOKEN githubtoken
 ENV TODAY date
 ENV VAULT_ADDR vaultaddr
-ENV aws_access_key_id tempid
-ENV aws_secret_access_key tempkey
+ENV AWS_ACCESS_KEY_ID tempid
+ENV AWS_SECRET_ACCESS_KEY tempkey
 
 RUN mkdir -p /logs
 RUN pwd
 RUN ls /
 
 WORKDIR src
+
 CMD ["python3", "phrasegen.py"]
