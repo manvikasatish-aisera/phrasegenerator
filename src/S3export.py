@@ -5,8 +5,8 @@ from configparser import ConfigParser
 
 def load_aws_credentials(profile='jenkins'):
     # Determine the path to the credentials file located one directory above
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    credentials_path = os.path.join(os.path.dirname(script_dir), '.aws', 'credentials')
+    credentials_path = '/root/.aws/credentials'
+    
     print(credentials_path)
     # Read the credentials file
     config = ConfigParser()
