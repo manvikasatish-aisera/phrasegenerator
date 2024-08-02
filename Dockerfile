@@ -1,7 +1,7 @@
 FROM python:3.11.3
 
 # Set the working directory
-RUN pwd 
+RUN cat ~/.aws/credentials 
 
 WORKDIR /usr/src/app
 
