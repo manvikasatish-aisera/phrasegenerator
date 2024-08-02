@@ -3,7 +3,7 @@ import boto3
 from datetime import datetime
 from configparser import ConfigParser
 
-def load_aws_credentials(profile='default'):
+def load_aws_credentials(profile='jenkins'):
     # Determine the path to the credentials file located one directory above
     script_dir = os.path.dirname(os.path.abspath(__file__))
     credentials_path = os.path.join(os.path.dirname(script_dir), '.aws', 'credentials')
