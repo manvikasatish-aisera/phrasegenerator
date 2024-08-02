@@ -12,6 +12,8 @@ def load_aws_credentials(profile='default'):
     config = ConfigParser()
     config.read(credentials_path)
 
+    print("got here")
+
     if profile in config:
         # Retrieve the values
         aws_access_key_id = config[profile]['aws_access_key_id']
