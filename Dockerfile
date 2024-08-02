@@ -1,8 +1,6 @@
 FROM python:3.11.3
 
 # Set the working directory
-RUN cat ~/.aws/credentials 
-
 WORKDIR /usr/src/app
 
 # Copy the rest of the code
