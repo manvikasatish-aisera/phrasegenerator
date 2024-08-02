@@ -1,6 +1,8 @@
 FROM python:3.11.3
 
 # Set the working directory
+RUN pwd 
+
 WORKDIR /usr/src/app
 
 # Copy the rest of the code
