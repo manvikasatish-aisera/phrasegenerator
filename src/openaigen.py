@@ -34,6 +34,7 @@ def check_content_length(filetext, prompt, title):
 def send_prompt_with_document(section, title):
   apikeyPath= "/qa/data/environment/common/openai"
 
+  #gets credentials to login into openai
   api_key = get_openai_details(apikeyPath, "OPENAI_API_KEY_V2")
   api_version = get_openai_details(apikeyPath, "OPENAI_API_VERSION_V2")
   azure_endpoint = get_openai_details(apikeyPath, "OPENAI_API_ENDPOINT_V2")
@@ -54,5 +55,5 @@ def send_prompt_with_document(section, title):
   ]
   )
   msg = completion.choices[0].message.content
-
+  #just the string part of the output is returned 
   return msg

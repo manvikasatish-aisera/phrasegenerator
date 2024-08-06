@@ -50,6 +50,7 @@ def iterate_docs(cluster, tenant, bot):
             section_url = f'http://{host_ip}:8088/tenant-server/v1/tenants/{tenant}/external-documents/retrieve-sections?documentKey={doc_key}&isCommitted=true'
             response = requests.get(section_url)
 
+            #Checks if call was successful
             if response.status_code == 200:
                 if title is None:
                     title = f'No Title. Document Key: {doc_key}'
@@ -81,6 +82,7 @@ def iterate_docs(cluster, tenant, bot):
         # Upload the file to S3
         uploadFile_to_S3(cluster, tenant, bot)
 
+#creates a csv file with information about the documents from the bot
 def getDocKeys(tenant, botid):
     url = f"http://{host_ip}:8088/tenant-server/v1/tenants/{tenant}/external-documents/check-health?botId={botid}"
     try:
